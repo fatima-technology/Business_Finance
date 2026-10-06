@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Business Finance OS</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2d;--panel2:#10243a;--line:#203650;--text:#eaf2fb;--muted:#8ea5bc;--accent:#26d6a1;--blue:#4da3ff;--gold:#ffc857;--red:#ff647c;--shadow:0 18px 45px #0007}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#06101c,#0b1727 45%,#081421);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:flex;min-height:100vh}.side{width:255px;background:#07111e;border-right:1px solid var(--line);padding:22px 14px;position:fixed;height:100vh;z-index:10}
+.logo{display:flex;align-items:center;gap:10px;padding:8px 10px 24px;border-bottom:1px solid var(--line);margin-bottom:16px}.logoMark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1689ff);display:grid;place-items:center;font-weight:900;color:#04111b}.logo b{display:block}.logo small{color:var(--muted)}
+nav button{width:100%;border:0;background:transparent;color:#9db2c7;text-align:left;padding:12px 14px;border-radius:10px;margin:3px 0;font-weight:600}
+nav button:hover,nav button.active{background:linear-gradient(90deg,#15334b,#11263a);color:white}
+.main{margin-left:255px;width:calc(100% - 255px);padding:26px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}.top h1{margin:0;font-size:26px}.top p{margin:5px 0;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}button.primary,.primary{background:linear-gradient(135deg,#18bd92,#1c8eea);color:white;border:0;padding:11px 16px;border-radius:9px;font-weight:700}
+button.secondary{background:#13263b;border:1px solid var(--line);color:#dce9f5;padding:10px 14px;border-radius:9px}
+.page{display:none}.page.active{display:block}.filters{display:flex;gap:10px;flex-wrap:wrap;background:var(--panel);padding:14px;border:1px solid var(--line);border-radius:14px;margin-bottom:18px}.filters label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}.filters input,.filters select,.form input,.form select,.form textarea{background:#081522;border:1px solid #29425c;color:white;padding:10px;border-radius:8px;outline:none}.filters .field{min-width:150px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:linear-gradient(145deg,#0e2034,#0b1828);border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:var(--shadow);transition:.2s}.card:hover{transform:translateY(-2px);border-color:#3a6385}.card.click{cursor:pointer}.card .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.6px}.card .value{font-size:25px;font-weight:800;margin:9px 0}.card .sub{font-size:12px;color:#91a8bc}.green{color:var(--accent)!important}.red{color:var(--red)!important}.gold{color:var(--gold)!important}.blue{color:var(--blue)!important}
+.section{margin-top:20px}.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.sectionTitle h2{font-size:17px;margin:0}
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}.bar{height:11px;background:#17283b;border-radius:20px;overflow:hidden;margin:12px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--blue));border-radius:20px}
+table{width:100%;border-collapse:collapse}th,td{padding:11px 9px;border-bottom:1px solid #1d3146;text-align:left;font-size:13px}th{color:#91a9bf;font-size:11px;text-transform:uppercase}td.num{text-align:right;font-variant-numeric:tabular-nums}.empty{text-align:center;color:var(--muted);padding:30px}
+.formGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.form .field{display:flex;flex-direction:column;gap:6px}.form label{font-size:12px;color:#9bb0c4}.form textarea{min-height:85px;resize:vertical}.wide{grid-column:1/-1}.formActions{margin-top:15px;display:flex;gap:8px}
+.kpiLine{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #1d3146}.kpiLine:last-child{border:0}.pill{padding:4px 8px;border-radius:20px;background:#142b41;color:#9fc0db;font-size:11px}
+.mobileMenu{display:none}
+.toast{position:fixed;right:22px;bottom:22px;background:#12263a;border:1px solid #31516e;color:white;padding:13px 17px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:99}
+.reportHead{display:none}.printSummary{display:none}
+.note{background:#2a2410;border:1px solid #5c4a1a;color:#ffd98a;padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px;line-height:1.5}
+.hint{color:#8ea5bc;font-size:13px;margin:4px 0 10px}
+th.num{text-align:right}td.in{color:var(--accent);text-align:right}td.out{color:var(--red);text-align:right}
+.rowBtns{display:flex;gap:6px;flex-wrap:wrap}
+tr.oldRow td{opacity:.45}
+.modalBg{display:none;position:fixed;inset:0;background:#000a;z-index:200;align-items:center;justify-content:center;padding:15px}.modal{width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:var(--shadow)}
+.printHead{display:none}.repTitle{margin:6px 0 10px;font-size:16px}tr.totalRow td{border-top:2px solid #3a5878}
+.filters select{background:#081522;border:1px solid #29425c;color:white;padding:10px;border-radius:8px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px;border:1px solid #29425c;border-radius:10px;background:#081522;font-size:13px;line-height:1.5;cursor:pointer}.chk input{margin-top:3px;width:18px;height:18px;flex:none}
+/* Desktop sidebar: menu scrolls when screen is short */
+.side{display:flex;flex-direction:column;overflow:hidden}
+.side .logo{flex:none}
+.side nav{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding-bottom:20px;scrollbar-width:thin;scrollbar-color:#29425c transparent}
+.side nav::-webkit-scrollbar{width:6px}.side nav::-webkit-scrollbar-thumb{background:#29425c;border-radius:6px}
+@media(max-height:720px){nav button{padding:9px 14px}.logo{padding-bottom:14px;margin-bottom:10px}}
+ .sideClose{display:none}
+@media(max-width:900px){
+ .side{display:none;position:fixed;left:0;top:0;width:285px;height:100vh;box-shadow:18px 0 45px #0009;z-index:100;overflow-y:auto}
+ .side.open{display:block}
+ .sideClose{display:block;position:absolute;right:12px;top:10px;width:38px;height:38px;border:1px solid #29425c;background:#10243a;color:#fff;border-radius:10px;font-size:25px;line-height:30px;z-index:3}
+ .main{margin-left:0;width:100%;padding:15px}.mobileMenu{display:block}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr 1fr}.top{align-items:flex-start}
+ .side::after{content:"";position:fixed;left:285px;top:0;width:calc(100vw - 285px);height:100vh;background:#0008;z-index:-1}
+}
+@media(max-width:560px){.grid{grid-template-columns:1fr 1fr;gap:9px}.card{padding:13px}.card .value{font-size:18px}.formGrid{grid-template-columns:1fr}.wide{grid-column:auto}.filters .field{min-width:130px;flex:1}.top h1{font-size:21px}}
+@media print{
+ @page{size:A4 portrait;margin:9mm}
+ html,body{background:#fff!important;color:#111!important}
+ .side,.top,.filters,.noPrint,button,.panel.form,.note,.toast{display:none!important}
+ .main{margin:0!important;width:100%!important;padding:0!important}
+ .page{display:none!important}
+ .page.active{display:block!important}
+ .act,.modalBg,.toast{display:none!important}
+ .printHead{display:block!important;text-align:center;margin:0 0 10px}
+ .printHead h1{margin:0;font-size:20px;color:#111}.printHead h2{margin:3px 0;font-size:14px;color:#111}.printHead p{margin:2px;font-size:10px;color:#555}
+ body[data-page=dashboard]:not(.printOnly) .printHead,body[data-page=reports]:not(.printOnly) .printHead{display:none!important}
+ body.printOnly .page.active>*{display:none!important}
+ body.printOnly .page.active>.printTarget{display:block!important}
+ .printTarget .sectionTitle,.printTarget .repTitle{display:none!important}
+ table{font-size:11px}th,td{padding:5px 6px!important}
+ .expMatrix th,.expMatrix td{font-size:9px!important;padding:4px!important}
+ .panel h2{font-size:13px!important}
+ tr.oldRow{display:none}
+ .page.active .reportHead{display:block!important;text-align:center;margin:0 0 8px}
+ .reportHead h1{margin:0;font-size:20px;color:#111}
+ .reportHead p{margin:3px;color:#555!important;font-size:10px}
+ .card,.panel{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;color:#111!important;transform:none!important}
+ .card .label,.card .sub{color:#555!important}.card .value{color:#111!important;font-size:14px!important}
+ .page.active .grid{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
+ #reports .two{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
+ .panel h2{color:#111!important}.kpiLine{border-color:#ddd!important}
+ #dashboard .printSummary{display:block!important;margin:0 0 9px}
+ .printSummaryTitle{font-size:13px;font-weight:800;text-align:center;margin-bottom:5px}
+ .printSummaryTable{width:100%;border-collapse:collapse;font-size:10px}
+ .printSummaryTable td{border:1px solid #bbb;padding:5px 6px;color:#111!important}
+ .printSummaryTable td:nth-child(odd){font-weight:700;background:#f3f3f3}
+ .printSummaryTable td:nth-child(even){text-align:right;font-weight:800}
+ #dashboard #dashCards{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:5px!important;margin:0 0 8px}
+ #dashboard #dashCards .card{padding:6px!important;min-height:48px!important;box-shadow:none!important;border:1px solid #bbb!important;background:#fff!important}
+ #dashboard #dashCards .label{font-size:8px!important;color:#555!important}
+ #dashboard #dashCards .value{font-size:12px!important;color:#111!important}
+ #dashboard #dashCards .sub{font-size:7px!important;color:#555!important}
+ #dashboard .two{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
+ #dashboard .panel{box-shadow:none!important;border:1px solid #bbb!important;background:#fff!important;color:#111!important;padding:7px!important}
+ #dashboard .panel h2{font-size:11px!important}
+ #dashboard .kpiLine{font-size:9px!important;padding:3px 0!important}
+ #dashboard .section:last-child{display:none!important}
+ th,td{color:#111!important;border-color:#ddd!important}
+ .green,.red,.gold,.blue{color:#111!important}
+}
+
+/* FINAL MOBILE SIDEBAR SCROLL FIX */
+@media(max-width:900px){
+ html,body{overflow-x:hidden}
+ .side{height:100dvh;max-height:100dvh}
+ .side.open{
+   display:flex!important;flex-direction:column;overflow:hidden!important;
+   touch-action:pan-y;
+ }
+ .side.open nav{
+   display:block;flex:1 1 auto;min-height:0;max-height:none;
+   overflow-y:auto!important;overflow-x:hidden!important;
+   -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+   touch-action:pan-y;padding-bottom:35px;
+ }
+ .side.open nav button{display:block}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+ <button class="sideClose" onclick="closeSide()" aria-label="Close menu">×</button>
+ <div class="logo"><div class="logoMark">BF</div><div><b id="brandName">Business Finance OS</b><small>Cash • Investment • Profit</small></div></div>
+ <nav>
+  <button class="active" data-page="dashboard">⌂ Dashboard</button>
+  <button data-page="reconcile">◎ Opening Reconciliation</button>
+  <button data-page="investment">↗ Capital / Investment</button>
+  <button data-page="income">↙ Sales / Collections</button>
+  <button data-page="purchases">↗ Purchases / Stock</button>
+  <button data-page="expenses">− Expenses</button>
+  <button data-page="withdrawal">↘ Owner Withdrawals</button>
+  <button data-page="receivable">◉ Market Receivables</button>
+  <button data-page="payable">◉ Payables</button>
+  <button data-page="cash">▣ Cash Ledger</button>
+  <button data-page="reports">▤ Financial Reports</button>
+  <button data-page="settings">⚙ Business Settings</button>
+ </nav>
+</aside>
+<main class="main">
+ <div class="top">
+  <div><button class="secondary mobileMenu" onclick="toggleSide()">☰</button><h1 id="pageTitle">Business Dashboard</h1><p id="todayText"></p></div>
+  <div class="actions"><button class="secondary" onclick="exportData()">Backup</button><button class="secondary" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button></div>
+ </div>
+
+ <div class="printHead" id="printHead"><h1 id="phBiz"></h1><h2 id="phTitle"></h2><p id="phInfo"></p></div>
+ <section id="dashboard" class="page active">
+  <div class="filters">
+   <div class="field"><label>FROM</label><input type="date" id="dashFrom"></div>
+   <div class="field"><label>TO</label><input type="date" id="dashTo"></div>
+   <button class="primary" onclick="renderDashboard()">Apply Period</button>
+  </div>
+  <div id="dashNote"></div>
+  <div class="reportHead"><h1 id="printBusiness">Business Finance Report</h1><p id="printPeriod"></p></div>
+  <div id="printSummary" class="printSummary"></div>
+  <div class="grid" id="dashCards"></div>
+  <div class="two section">
+   <div class="panel"><div class="sectionTitle"><h2>Cash Position</h2><span class="pill">Automatic</span></div><div id="cashBreakdown"></div></div>
+   <div class="panel"><div class="sectionTitle"><h2>Profitability</h2><span class="pill">Selected period</span></div><div id="profitBreakdown"></div></div>
+  </div>
+  <div class="panel section" id="wcPanel"></div>
+  <div class="panel section"><div class="sectionTitle"><h2>Recent Transactions</h2><button class="secondary noPrint" onclick="go('cash')">View Ledger</button></div><div id="recentTable"></div></div>
+ </section>
+
+ 
+ <section id="reconcile" class="page">
+  <div class="panel form">
+   <h2>Opening Business Reconciliation</h2>
+   <p style="color:#8ea5bc">Agar purani investment ka exact record nahi hai, yahan business ki actual opening position enter karein. System assets minus liabilities se opening capital calculate karega.</p>
+   <div class="formGrid">
+    <div class="field"><label>Opening Date</label><input type="date" id="reconDate"></div>
+    <div class="field"><label>Cash In Hand (Rs.)</label><input type="number" id="reconCash" min="0" step=".01"></div>
+    <div class="field"><label>Bank Balance (Rs.)</label><input type="number" id="reconBank" min="0" step=".01"></div>
+    <div class="field"><label>Stock at Cost (Rs.)</label><input type="number" id="reconStock" min="0" step=".01"></div>
+    <div class="field"><label>Market Receivable (Rs.)</label><input type="number" id="reconAR" min="0" step=".01"></div>
+    <div class="field"><label>Other Assets (Rs.)</label><input type="number" id="reconOtherAssets" min="0" step=".01"></div>
+    <div class="field"><label>Payable / Amount to Give (Rs.)</label><input type="number" id="reconAP" min="0" step=".01"></div>
+    <div class="field"><label>Other Liabilities (Rs.)</label><input type="number" id="reconOtherLiab" min="0" step=".01"></div>
+    <div class="field wide"><label>Verification Note</label><textarea id="reconNote" placeholder="Physical count / opening balance details..."></textarea></div>
+   </div>
+   <label class="chk"><input type="checkbox" id="reconCutoff"> <span><b>Ye aaj ki asal ginti hai.</b> Is se pehle dali hui saari entries (sales, recovery, purchase, market credit waghera) purana record hain, unhein hisaab mein shamil na karein.</span></label>
+   <div id="cutoffStatus" class="hint"></div>
+   <div class="formActions"><button class="primary" onclick="saveReconciliation()">Save Opening Position</button></div>
+  </div>
+  <div class="grid section" id="reconCards"></div>
+  <div class="panel section" id="reconResult"></div>
+ </section>
+
+<section id="investment" class="page">
+  <div class="panel form"><h2>Add Investment</h2><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="invDate"></div>
+   <div class="field"><label>Amount (Rs.)</label><input type="number" id="invAmount" min="0" step="0.01"></div>
+   <div class="field"><label>Source / Investor</label><input id="invSource" placeholder="Owner / Partner / Other"></div>
+   <div class="field wide"><label>Note</label><textarea id="invNote" placeholder="Investment detail..."></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveInvestment()">Save Investment</button></div></div>
+  <div class="grid section" id="invStats"></div><div class="panel section" id="invTable"></div>
+ </section>
+
+ <section id="income" class="page">
+  <div class="panel form"><h2>Add Income / Sale</h2><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="incDate"></div>
+   <div class="field"><label>Amount (Rs.)</label><input type="number" id="incAmount" min="0" step="0.01"></div>
+   <div class="field"><label>Type</label><select id="incType"><option>Sale</option><option>Cash Collection</option><option>Other Income</option></select></div>
+   <div class="field"><label>Sale Payment (sirf Sale ke liye)</label><select id="incMode"><option>Credit (Udhaar)</option><option>Cash Received</option></select></div>
+   <div class="field wide"><label>Customer / Detail</label><textarea id="incNote" placeholder="Customer, invoice or income detail..."></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveIncome()">Save Income</button></div><div class="formActions"><button class="secondary" onclick="saveCollection()">Record Market Collection</button></div></div>
+  <div class="grid section" id="incStats"></div><div class="panel section" id="incTable"></div>
+ </section>
+
+ 
+ <section id="purchases" class="page">
+  <div class="panel form"><h2>Purchases / Stock</h2>
+   <div class="formGrid">
+    <div class="field"><label>Date</label><input type="date" id="purchaseDate"></div>
+    <div class="field"><label>Purchase Amount (Rs.)</label><input type="number" id="purchaseAmount" min="0" step=".01"></div>
+    <div class="field"><label>Payment</label><select id="purchaseMode"><option>Cash Paid</option><option>Credit / Payable</option></select></div>
+    <div class="field wide"><label>Supplier / Detail</label><textarea id="purchaseNote"></textarea></div>
+   </div>
+   <div class="formActions"><button class="primary" onclick="savePurchase()">Save Purchase</button></div>
+  </div>
+  <div class="panel form section">
+   <h2>Closing Stock</h2>
+   <p style="color:#8ea5bc">Yahan period ke end par actual closing stock ki value <b>cost price</b> par enter karein. Ye Purchase mein add nahi hogi aur Cash ko affect nahi karegi.</p>
+   <div class="formGrid">
+    <div class="field"><label>Stock Date</label><input type="date" id="closingStockDate"></div>
+    <div class="field"><label>Closing Stock Amount (Rs.)</label><input type="number" id="closingStockAmount" min="0" step=".01"></div>
+    <div class="field wide"><label>Note</label><textarea id="closingStockNote" placeholder="Example: Closing stock as on 05-10-2026"></textarea></div>
+   </div>
+   <div class="formActions"><button class="primary" onclick="saveClosingStock()">Save Closing Stock</button></div>
+  </div>
+  <div class="grid section" id="purchaseCards"></div><div class="panel section" id="purchaseTable"></div><div class="panel section" id="closingStockTable"></div>
+ </section>
+
+<section id="expenses" class="page">
+  <div class="panel form"><h2>Add Expense</h2><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="expDate"></div>
+   <div class="field"><label>Amount (Rs.)</label><input type="number" id="expAmount" min="0" step="0.01"></div>
+   <div class="field"><label>Category</label><select id="expCat"><option>Rent</option><option>Salary</option><option>Transport</option><option>Utilities</option><option>Food</option><option>Repair</option><option>Marketing</option><option>Other</option></select></div>
+   <div class="field wide"><label>Expense Detail</label><textarea id="expNote" placeholder="What was the expense for?"></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveExpense()">Save Expense</button></div></div>
+  <div class="grid section" id="expStats"></div><div class="panel section" id="expTable"></div>
+  <div class="panel section" id="expReportPanel">
+   <div class="sectionTitle"><h2>Expense Report</h2></div>
+   <div class="filters">
+    <div class="field"><label>REPORT</label><select id="expRepType" onchange="renderExpReport()"><option value="month">Month-wise (date wise entries)</option><option value="year">Year-wise (har month ka total)</option></select></div>
+    <div class="field" id="expRepMonthField"><label>MONTH</label><input type="month" id="expRepMonth" onchange="renderExpReport()"></div>
+    <div class="field" id="expRepYearField"><label>YEAR</label><input type="number" id="expRepYear" min="2000" max="2100" onchange="renderExpReport()"></div>
+    <button class="primary" onclick="printExpReport()">Print / PDF</button>
+   </div>
+   <div id="expReport"></div>
+  </div>
+ </section>
+
+ 
+ <section id="withdrawal" class="page">
+  <div class="panel form"><h2>Owner Withdrawal</h2>
+   <div class="formGrid">
+    <div class="field"><label>Date</label><input type="date" id="withdrawDate"></div>
+    <div class="field"><label>Amount (Rs.)</label><input type="number" id="withdrawAmount" min="0" step=".01"></div>
+    <div class="field"><label>Purpose</label><input id="withdrawPurpose"></div>
+    <div class="field wide"><label>Note</label><textarea id="withdrawNote"></textarea></div>
+   </div>
+   <div class="formActions"><button class="primary" onclick="saveWithdrawal()">Save Withdrawal</button></div>
+  </div>
+  <div class="grid section" id="withdrawCards"></div><div class="panel section" id="withdrawTable"></div>
+ </section>
+
+<section id="receivable" class="page">
+  <div class="panel form"><h2>Market Receivable</h2><p class="hint">Credit (Udhaar) sales khud-ba-khud receivable mein jati hain. Yahan sirf woh raqam likhein jo Sale entry ke tor par enter nahi hui, warna double count hoga.</p><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="recDate"></div>
+   <div class="field"><label>Customer / Party</label><input id="recParty"></div>
+   <div class="field"><label>Amount Due (Rs.)</label><input type="number" id="recAmount" min="0" step=".01"></div>
+   <div class="field wide"><label>Note</label><textarea id="recNote"></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveReceivable()">Save Receivable</button></div></div>
+  <div class="grid section" id="recStats"></div><div class="panel section" id="recTable"></div>
+ </section>
+
+ <section id="payable" class="page">
+  <div class="panel form"><h2>Payable / Amount to Give</h2><p class="hint">Credit purchases khud-ba-khud payable mein jati hain. Yahan sirf woh raqam likhein jo Purchase entry ke tor par enter nahi hui.</p><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="payDate"></div>
+   <div class="field"><label>Party</label><input id="payParty"></div>
+   <div class="field"><label>Amount Payable (Rs.)</label><input type="number" id="payAmount" min="0" step=".01"></div>
+   <div class="field wide"><label>Note</label><textarea id="payNote"></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="savePayable()">Save Payable</button></div></div>
+  <div class="panel form section"><h2>Pay Supplier</h2><p class="hint">Supplier ko jo payment karein woh yahan likhein. Ye payable kam karegi aur cash se nikalegi.</p><div class="formGrid">
+   <div class="field"><label>Date</label><input type="date" id="spDate"></div>
+   <div class="field"><label>Supplier / Party</label><input id="spParty"></div>
+   <div class="field"><label>Amount Paid (Rs.)</label><input type="number" id="spAmount" min="0" step=".01"></div>
+   <div class="field wide"><label>Note</label><textarea id="spNote"></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveSupplierPayment()">Save Payment</button></div></div>
+  <div class="grid section" id="payStats"></div><div class="panel section" id="payTable"></div><div class="panel section" id="spTable"></div>
+ </section>
+
+ <section id="cash" class="page">
+  <div class="filters"><div class="field"><label>FROM</label><input type="date" id="cashFrom"></div><div class="field"><label>TO</label><input type="date" id="cashTo"></div><button class="primary" onclick="renderCash()">Apply</button></div>
+  <div class="grid" id="cashStats"></div><div class="panel section" id="cashTable"></div>
+ </section>
+
+ <section id="reports" class="page">
+  <div class="filters">
+   <div class="field"><label>FROM</label><input type="date" id="repFrom"></div><div class="field"><label>TO</label><input type="date" id="repTo"></div>
+   <button class="primary" onclick="renderReports()">Generate Report</button><button class="secondary" onclick="printReports()">Print This Report</button>
+  </div>
+  <div class="reportHead"><h1 id="repBusiness">Business Finance Report</h1><p id="repPeriod"></p></div>
+  <div class="grid" id="repStats"></div><div class="two section"><div class="panel" id="monthlyReport"></div><div class="panel" id="categoryReport"></div></div>
+  <div class="panel section" id="yearlyReport"></div>
+ </section>
+
+ <section id="settings" class="page">
+  <div class="panel form"><h2>Business Settings</h2><div class="formGrid">
+   <div class="field"><label>Business Name</label><input id="setBusiness"></div><div class="field"><label>Currency</label><input id="setCurrency" value="Rs."></div><div class="field"><label>Owner / Manager</label><input id="setOwner"></div>
+   <div class="field wide"><label>Business Address / Contact</label><textarea id="setContact"></textarea></div>
+  </div><div class="formActions"><button class="primary" onclick="saveSettings()">Save Settings</button><button class="secondary" onclick="clearAllData()">Clear All Data</button></div></div>
+  <div class="panel section"><h3>Calculation Rules</h3><div class="kpiLine"><span>Cash in Hand</span><b>Opening Cash + Investment + Cash Sales + Collections + Other Income − Cash Purchases − Expenses − Withdrawals − Supplier Payments</b></div><div class="kpiLine"><span>Cost of Goods Sold</span><b>Opening Stock + Purchases − Closing Stock</b></div><div class="kpiLine"><span>Net Profit</span><b>Sales + Other Income − Cost of Goods Sold − Expenses</b></div><div class="kpiLine"><span>Market Receivable</span><b>Opening Receivable + Credit Sales + Other Dues − Collections</b></div><div class="kpiLine"><span>Payable</span><b>Opening Payable + Credit Purchases + Other Payables − Supplier Payments</b></div><div class="kpiLine"><span>Current Business Investment</span><b>Opening Capital + Added Investment + Profit − Withdrawals</b></div><div class="kpiLine"><span>Mojooda Investment (Circle mein)</span><b>Cash + Bank + Stock + Market Receivable − Payable</b></div><div class="kpiLine"><span>Opening Date</span><b>Opening date se pehle ki entries hisaab mein shamil nahi hoti</b></div></div>
+ </section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modalBg" id="editModal" onclick="if(event.target===this)closeEdit()">
+ <div class="modal panel form"><h2 id="editTitle">Edit Entry</h2><div class="formGrid" id="editFields"></div>
+ <div class="formActions"><button class="primary" onclick="saveEdit()">Save Changes</button><button class="secondary" onclick="closeEdit()">Cancel</button></div></div>
+</div>
+
+
+<script>
+const KEY="business_finance_os_final_v3";
+const $=id=>document.getElementById(id);
+const ARR=["investments","income","expenses","purchases","closingStock","withdrawals","receivables","payables","supplierPayments"];
+function blankDb(){return{
+ settings:{business:"My Business",currency:"Rs.",owner:"",contact:""},
+ opening:{date:"",cash:0,bank:0,stock:0,receivable:0,otherAssets:0,payable:0,otherLiabilities:0,note:"",verified:false,cutoff:0},
+ investments:[],income:[],expenses:[],purchases:[],closingStock:[],withdrawals:[],receivables:[],payables:[],supplierPayments:[]
+}}
+function normalize(d){
+ let b=blankDb();d=(d&&typeof d==="object")?d:{};
+ d.settings={...b.settings,...(d.settings||{})};
+ d.opening={...b.opening,...(d.opening||{})};
+ ["cash","bank","stock","receivable","otherAssets","payable","otherLiabilities"].forEach(k=>d.opening[k]=Number(d.opening[k])||0);
+ ARR.forEach(k=>{if(!Array.isArray(d[k]))d[k]=[]});
+ return d;
+}
+let db;try{db=normalize(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){db=normalize(null)}
+// Local (Pakistan) date, not UTC
+function localDate(d){d=d||new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+const today=localDate();
+function prevDay(d){let t=new Date(d+"T00:00:00");t.setDate(t.getDate()-1);return localDate(t)}
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function uid(){return Date.now()+Math.random().toString(16).slice(2)}
+function money(n){if(n===null||n===undefined)return "Not Established";return `${db.settings.currency||"Rs."} ${Number(n||0).toLocaleString("en-PK",{minimumFractionDigits:2,maximumFractionDigits:2})}`}
+function sum(a){return a.reduce((x,y)=>x+(Number(y.amount)||0),0)}
+function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(t){$("toast").textContent=t;$("toast").style.display="block";clearTimeout(toast._t);toast._t=setTimeout(()=>$("toast").style.display="none",2600)}
+
+// ---------- Date / period helpers ----------
+function openDate(){return db.opening.verified&&db.opening.date?db.opening.date:""}
+function createdAt(x){let t=parseInt(String(x.id||"").slice(0,13),10);return isNaN(t)?0:t}
+// counts only entries from the opening date, and (if set) only entries made after the opening count
+function eff(x){
+ let f=openDate(),c=Number(db.opening.cutoff)||0;
+ if(!x.date)return false;
+ if(f&&x.date<f)return false;
+ if(c&&db.opening.verified){let t=createdAt(x);if(t&&t<=c)return false}
+ return true;
+}
+function upto(arr,to){return arr.filter(x=>eff(x)&&x.date<=to)}
+function between(arr,from,to){return arr.filter(x=>eff(x)&&(!from||x.date>=from)&&x.date<=to)}
+function allEff(arr){return arr.filter(eff)}
+const isSale=x=>x.type==="Sale";
+const isCashSale=x=>x.type==="Sale"&&x.mode==="Cash Received";
+const isCreditSale=x=>x.type==="Sale"&&x.mode!=="Cash Received";
+const isColl=x=>x.type==="Cash Collection";
+const isOther=x=>x.type==="Other Income";
+const isCashPur=x=>x.mode==="Cash Paid";
+const isCreditPur=x=>x.mode==="Credit / Payable";
+function getPeriod(fid,tid){
+ let from=$(fid).value||"",to=$(tid).value||today;
+ if(from&&from>to){let t=from;from=to;to=t;$(fid).value=from;$(tid).value=to;toast("FROM aur TO dates ulti thin, theek kar di gayi")}
+ return{from,to};
+}
+function fmtDate(d){if(!d)return "";let [y,m,dd]=d.split("-");return `${dd}-${m}-${y}`}
+function periodText(from,to){return `${from?fmtDate(from):"Start"} to ${fmtDate(to)}`}
+
+// ---------- Core calculations ----------
+function openingCapital(){
+ let o=db.opening;
+ if(!o.verified)return null;
+ return o.cash+o.bank+o.stock+o.receivable+o.otherAssets-o.payable-o.otherLiabilities;
+}
+function cashAsOf(to){
+ let o=db.opening,inc=upto(db.income,to);
+ return o.cash+sum(upto(db.investments,to))+sum(inc.filter(x=>isColl(x)||isOther(x)||isCashSale(x)))
+  -sum(upto(db.purchases,to).filter(isCashPur))-sum(upto(db.expenses,to))-sum(upto(db.withdrawals,to))-sum(upto(db.supplierPayments,to));
+}
+function arAsOf(to){let inc=upto(db.income,to);return db.opening.receivable+sum(inc.filter(isCreditSale))+sum(upto(db.receivables,to))-sum(inc.filter(isColl))}
+function apAsOf(to){return db.opening.payable+sum(upto(db.purchases,to).filter(isCreditPur))+sum(upto(db.payables,to))-sum(upto(db.supplierPayments,to))}
+function latestStock(test){return db.closingStock.filter(x=>eff(x)&&test(x)).sort((a,b)=>b.date.localeCompare(a.date))[0]||null}
+function startStock(from){
+ let f=openDate();
+ if(!from||(f&&from<=f))return{amount:db.opening.stock,label:f?`Opening stock (${fmtDate(f)})`:"Opening stock"};
+ let s=latestStock(x=>x.date<from);
+ return s?{amount:Number(s.amount)||0,label:`Stock as on ${fmtDate(s.date)}`}:null;
+}
+function endStock(from,to){
+ let lo=from||openDate();
+ let e=latestStock(x=>x.date<=to&&(!lo||x.date>=lo));
+ return e?{amount:Number(e.amount)||0,label:`As on ${fmtDate(e.date)}`}:null;
+}
+function profitFor(from,to){
+ let inc=between(db.income,from,to);
+ let sales=sum(inc.filter(isSale)),other=sum(inc.filter(isOther)),exp=sum(between(db.expenses,from,to)),pur=sum(between(db.purchases,from,to));
+ let s=startStock(from),e=endStock(from,to);
+ if(!e&&s&&!pur&&!sales)e={amount:s.amount,label:"No stock movement"};
+ let cogs=(s&&e)?Math.max(0,s.amount+pur-e.amount):null;
+ let profit=cogs===null?null:sales+other-cogs-exp;
+ return{sales,other,exp,pur,start:s,end:e,cogs,profit,pct:(profit!==null&&sales)?profit/sales*100:0,missing:!s?"start":(!e?"end":"")};
+}
+function profitNote(r){
+ if(r.missing==="end")return "Closing stock enter karein (Purchases / Stock)";
+ if(r.missing==="start")return "Period ke shuru ka stock nahi mila";
+ return `Profit ${r.pct.toFixed(2)}% of sales`;
+}
+function currentInvestment(to){
+ let cap=openingCapital();if(cap===null)return null;
+ let p=profitFor(openDate(),to).profit;if(p===null)return null;
+ return cap+sum(upto(db.investments,to))+p-sum(upto(db.withdrawals,to));
+}
+// Mojooda investment = paisa jo is waqt business mein ghoom raha hai
+function stockAsOf(to){
+ let st=latestStock(x=>x.date<=to);
+ if(st)return{amount:Number(st.amount)||0,label:`As on ${fmtDate(st.date)}`};
+ let moved=upto(db.purchases,to).length||upto(db.income,to).filter(isSale).length;
+ return moved?null:{amount:db.opening.stock,label:"Opening stock"};
+}
+function workingCapital(to){
+ let cash=cashAsOf(to),bank=db.opening.bank,st=stockAsOf(to),ar=arAsOf(to),ap=apAsOf(to);
+ let total=st?cash+bank+st.amount+ar-ap:null;
+ return{cash,bank,stock:st,ar,ap,total};
+}
+function preOpeningCount(){return ARR.reduce((n,k)=>n+db[k].filter(x=>x.date&&!eff(x)).length,0)}
+
+// ---------- UI helpers ----------
+function go(page){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(page).classList.add("active");
+ document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+ if(innerWidth<=900)closeSide();
+ let n={dashboard:"Business Dashboard",reconcile:"Opening Reconciliation",investment:"Capital / Investment",income:"Sales / Collections",purchases:"Purchases / Stock",expenses:"Expense Ledger",withdrawal:"Owner Withdrawals",receivable:"Market Receivables",payable:"Payables",cash:"Cash Ledger",reports:"Financial Reports",settings:"Business Settings"};
+ $("pageTitle").textContent=n[page];document.body.dataset.page=page;
+}
+function sideEl(){return document.querySelector(".side")}
+function toggleSide(){sideEl().classList.toggle("open")}
+function closeSide(){sideEl().classList.remove("open")}
+window.addEventListener("resize",()=>{if(innerWidth>900)closeSide()});
+// tap on dark area beside the open menu closes it
+sideEl().addEventListener("click",e=>{let s=sideEl();if(e.target===s&&e.clientX>s.getBoundingClientRect().width)closeSide()});
+
+function card(label,value,sub,cls,page){
+ let v=typeof value==="string"?esc(value):money(value);
+ return `<div class="card ${page?"click":""}" ${page?`onclick="go('${page}')"`:""}><div class="label">${label}</div><div class="value ${cls||""}">${v}</div><div class="sub">${sub||""}</div></div>`;
+}
+function table(rows,cols,type,extra){
+ if(!rows.length)return '<div class="empty">No records found.</div>';
+ return `<div style="overflow:auto"><table><thead><tr>${cols.map(c=>`<th class="${c[0]==="amount"?"num":""}">${c[1]}</th>`).join("")}<th class="act">Action</th></tr></thead><tbody>${rows.map(r=>`<tr ${eff(r)?"":'class="oldRow" title="Purana record: hisaab mein shamil nahi"'}>${cols.map(c=>`<td class="${c[0]==="amount"?"num":""}">${c[0]==="amount"?money(r[c[0]]):esc(r[c[0]])}</td>`).join("")}<td class="act">${actBtns(r._t||type,r.id,extra?extra(r):"")}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function del(type,id){
+ let rec=(db[type]||[]).find(x=>x.id===id);if(!rec)return;
+ let lt=null;
+ if(type==="receivables"&&rec.linkId)lt="income";
+ if(type==="payables"&&rec.linkId)lt="supplierPayments";
+ if(!confirm(lt?"Is entry ki linked collection/payment bhi delete hogi. Delete karein?":"Delete this entry?"))return;
+ db[type]=db[type].filter(x=>x.id!==id);
+ if(lt)db[lt]=db[lt].filter(x=>x.id!==rec.linkId);
+ if(type==="income"&&rec.receivableId){let r=db.receivables.find(x=>x.id===rec.receivableId);if(r){r.status="Open";delete r.linkId}}
+ if(type==="supplierPayments"&&rec.payableId){let p=db.payables.find(x=>x.id===rec.payableId);if(p){p.status="Open";delete p.linkId}}
+ save();renderAll();toast("Entry deleted");
+}
+function add(type,obj){
+ if(!obj.date){toast("Date select karein");return}
+ db[type].push({id:uid(),...obj});save();renderAll();toast("Entry saved");
+ let f=openDate();if(f&&obj.date<f)toast("Saved, lekin ye opening date se pehle ki hai is liye hisaab mein shamil nahi hogi");
+}
+function valid(id){let n=Number($(id).value);if(!(n>0)){toast("Enter a valid amount");return null}return n}
+
+// ---------- Save actions ----------
+function saveReconciliation(){
+ if(!$("reconDate").value){toast("Opening date select karein");return}
+ db.opening={date:$("reconDate").value,cash:Number($("reconCash").value)||0,bank:Number($("reconBank").value)||0,stock:Number($("reconStock").value)||0,receivable:Number($("reconAR").value)||0,otherAssets:Number($("reconOtherAssets").value)||0,payable:Number($("reconAP").value)||0,otherLiabilities:Number($("reconOtherLiab").value)||0,note:$("reconNote").value,verified:true,cutoff:Number(db.opening.cutoff)||0};
+ if($("reconCutoff").checked){db.opening.cutoff=Date.now();$("reconCutoff").checked=false}
+ ["dashFrom","cashFrom","repFrom"].forEach(id=>$(id).value=db.opening.date);
+ save();renderAll();toast("Opening position saved and verified");
+}
+function saveInvestment(){let a=valid("invAmount");if(a==null)return;add("investments",{date:$("invDate").value,amount:a,source:$("invSource").value,note:$("invNote").value})}
+function saveIncome(){let a=valid("incAmount");if(a==null)return;let type=$("incType").value;add("income",{date:$("incDate").value,amount:a,type:type,mode:type==="Sale"?$("incMode").value:"",note:$("incNote").value})}
+function saveCollection(){let a=valid("incAmount");if(a==null)return;add("income",{date:$("incDate").value,amount:a,type:"Cash Collection",mode:"",note:$("incNote").value})}
+function saveExpense(){let a=valid("expAmount");if(a==null)return;add("expenses",{date:$("expDate").value,amount:a,category:$("expCat").value,note:$("expNote").value})}
+function savePurchase(){let a=valid("purchaseAmount");if(a==null)return;add("purchases",{date:$("purchaseDate").value,amount:a,mode:$("purchaseMode").value,note:$("purchaseNote").value})}
+function saveClosingStock(){let a=valid("closingStockAmount");if(a==null)return;add("closingStock",{date:$("closingStockDate").value,amount:a,note:$("closingStockNote").value})}
+function saveWithdrawal(){let a=valid("withdrawAmount");if(a==null)return;add("withdrawals",{date:$("withdrawDate").value,amount:a,purpose:$("withdrawPurpose").value,note:$("withdrawNote").value})}
+function saveReceivable(){let a=valid("recAmount");if(a==null)return;add("receivables",{date:$("recDate").value,party:$("recParty").value,amount:a,note:$("recNote").value,status:"Open"})}
+function savePayable(){let a=valid("payAmount");if(a==null)return;add("payables",{date:$("payDate").value,party:$("payParty").value,amount:a,note:$("payNote").value,status:"Open"})}
+function saveSupplierPayment(){let a=valid("spAmount");if(a==null)return;add("supplierPayments",{date:$("spDate").value,party:$("spParty").value,amount:a,note:$("spNote").value})}
+function markReceived(id){
+ let r=db.receivables.find(x=>x.id===id);if(!r||r.status==="Paid")return;
+ if(!confirm(`${r.party||"Party"} se ${money(r.amount)} aaj receive hue? Ye Cash Collection mein add hoga.`))return;
+ let cid=uid();
+ db.income.push({id:cid,date:today,amount:Number(r.amount),type:"Cash Collection",mode:"",note:`Received: ${r.party||""}`.trim(),receivableId:r.id});
+ r.status="Paid";r.linkId=cid;save();renderAll();toast("Marked received");
+}
+function markPaid(id){
+ let p=db.payables.find(x=>x.id===id);if(!p||p.status==="Paid")return;
+ if(!confirm(`${p.party||"Party"} ko ${money(p.amount)} aaj pay kiye? Ye cash se nikalega.`))return;
+ let pid=uid();
+ db.supplierPayments.push({id:pid,date:today,amount:Number(p.amount),party:p.party||"",note:"Payable paid",payableId:p.id});
+ p.status="Paid";p.linkId=pid;save();renderAll();toast("Marked paid");
+}
+
+// ---------- Renders ----------
+function fmtTime(t){let d=new Date(t);return `${fmtDate(localDate(d))} ${d.toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit"})}`}
+function removeCutoff(){if(!confirm("Purani entries dobara hisaab mein shamil ho jayengi. Continue?"))return;db.opening.cutoff=0;save();renderAll();toast("Purani entries wapas shamil")}
+function renderReconcile(){
+ let o=db.opening,cap=openingCapital();
+ $("cutoffStatus").innerHTML=o.cutoff?`Abhi: ${esc(fmtTime(o.cutoff))} se pehle dali gayi saari entries purana record hain aur hisaab mein shamil nahi. <button class="secondary" onclick="removeCutoff()">Yeh setting hatayein</button>`:"";
+ ["reconDate","reconCash","reconBank","reconStock","reconAR","reconOtherAssets","reconAP","reconOtherLiab","reconNote"].forEach((id,i)=>{if($(id))$(id).value=[o.date||today,o.cash,o.bank,o.stock,o.receivable,o.otherAssets,o.payable,o.otherLiabilities,o.note][i]});
+ $("reconCards").innerHTML=card("Verified Opening Capital",cap,"Assets minus liabilities",cap===null?"gold":"green")+card("Opening Cash",o.cash,"Physical cash","green")+card("Opening Stock",o.stock,"At cost","gold")+card("Opening Receivable",o.receivable,"Market owes you","blue");
+ $("reconResult").innerHTML=`<h2>Opening Position</h2><div class="kpiLine"><span>Total Assets</span><b>${money(o.cash+o.bank+o.stock+o.receivable+o.otherAssets)}</b></div><div class="kpiLine"><span>Total Liabilities</span><b>${money(o.payable+o.otherLiabilities)}</b></div><div class="kpiLine"><span>Verified Opening Capital</span><b class="${cap===null?"gold":"green"}">${money(cap)}</b></div>`;
+}
+function setHeads(from,to){
+ let b=db.settings.business||"Business",p=`Period: ${periodText(from,to)} | Printed: ${fmtDate(today)}`;
+ return{b,p};
+}
+function renderDashboard(){
+ let {from,to}=getPeriod("dashFrom","dashTo");
+ let r=profitFor(from,to),c=cashAsOf(to),ar=arAsOf(to),ap=apAsOf(to),cur=currentInvestment(to);
+ let inc=between(db.income,from,to),coll=sum(inc.filter(isColl)),cashSales=sum(inc.filter(isCashSale)),other=sum(inc.filter(isOther));
+ let invP=sum(between(db.investments,from,to)),wdP=sum(between(db.withdrawals,from,to)),spP=sum(between(db.supplierPayments,from,to)),cashPurP=sum(between(db.purchases,from,to).filter(isCashPur));
+ let cashStart=from?cashAsOf(prevDay(from)):db.opening.cash;
+ let stockVal=r.end?r.end.amount:"Not entered",stockSub=r.end?r.end.label:"Is period ke liye enter nahi";
+ let wc=workingCapital(to);
+ let h=setHeads(from,to);$("printBusiness").textContent=h.b;$("printPeriod").textContent=h.p;
+ let notes=[];
+ if(!db.opening.verified)notes.push("Opening Reconciliation abhi save nahi hui, is liye Business Investment \"Not Established\" dikhayega.");
+ if(r.missing==="end")notes.push("Is period ka Closing Stock enter nahi hua, is liye Profit calculate nahi ho sakta. Purchases / Stock page par closing stock enter karein.");
+ if(r.missing==="start")notes.push("Period ke shuru ka stock nahi mila. FROM date ko opening date par rakhein ya us se pehle ka closing stock enter karein.");
+ let pre=preOpeningCount();if(pre)notes.push(`${pre} purani entries (opening se pehle ka record) hisaab mein shamil nahi. Tables mein yeh halki (faded) dikhti hain.`);
+ $("dashNote").innerHTML=notes.length?`<div class="note">${notes.map(esc).join("<br>")}</div>`:"";
+ $("dashCards").innerHTML=card("Mojooda Investment (Circle mein)",wc.total,wc.total===null?"Closing stock enter karein":"Cash + Bank + Stock + Lena − Dena","green","")+card("Cash In Hand",c,`As on ${fmtDate(to)}`,c<0?"red":"green","cash")+card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold","investment")+card("Total Sales",r.sales,"Selected period","blue","income")+card("Total Expenses",r.exp,"Selected period","red","expenses")+card("Stock Purchases",r.pur,"Selected period","gold","purchases")+card("Closing Stock",stockVal,stockSub,"gold","purchases")+card("Market Receivable",ar,"Customers owe","gold","receivable")+card("Payable",ap,"Amount to give","red","payable")+card("Net Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"),"reports");
+ let pp=r.profit===null?"Not Established":`${money(r.profit)} (${r.pct.toFixed(2)}%)`;
+ $("printSummary").innerHTML=`<div class="printSummaryTitle">Current Business Position</div><table class="printSummaryTable"><tbody><tr><td><b>Current Business Investment</b></td><td><b>${money(cur)}</b></td><td>Cash In Hand</td><td>${money(c)}</td></tr><tr><td><b>Mojooda Investment (Circle mein)</b></td><td><b>${money(wc.total)}</b></td><td>Stock (${wc.stock?esc(wc.stock.label):"Not entered"})</td><td>${wc.stock?money(wc.stock.amount):"Not entered"}</td></tr><tr><td>Market Credit (Lena Hai)</td><td>${money(ar)}</td><td>Payable / Udhaar (Dena Hai)</td><td>${money(ap)}</td></tr><tr><td>Closing Stock</td><td>${r.end?money(r.end.amount):"Not entered"}</td><td>Total Expenses</td><td>${money(r.exp)}</td></tr><tr><td>Total Sales</td><td>${money(r.sales)}</td><td>Total Purchase</td><td>${money(r.pur)}</td></tr><tr><td>Cash Recovery</td><td>${money(coll)}</td><td><b>Net Profit / Loss</b></td><td><b>${pp}</b></td></tr></tbody></table>`;
+ let diff=(wc.total!==null&&cur!==null)?wc.total-(cur-db.opening.otherAssets+db.opening.otherLiabilities):null;
+ $("wcPanel").innerHTML=`<div class="sectionTitle"><h2>Mojooda Investment: Is waqt business mein kitna paisa ghoom raha hai</h2><span class="pill">As on ${fmtDate(to)}</span></div><div class="kpiLine"><span>Cash In Hand</span><b>${money(wc.cash)}</b></div><div class="kpiLine"><span>Bank Balance (opening wala)</span><b>${money(wc.bank)}</b></div><div class="kpiLine"><span>Stock at Cost ${wc.stock?"("+esc(wc.stock.label)+")":""}</span><b>${wc.stock?money(wc.stock.amount):"Not entered"}</b></div><div class="kpiLine"><span>+ Market Credit (Lena Hai)</span><b>${money(wc.ar)}</b></div><div class="kpiLine"><span>− Payable (Dena Hai)</span><b class="red">${money(wc.ap)}</b></div><div class="kpiLine"><span><b>Mojooda Investment (Circle mein)</b></span><b class="${wc.total===null?"gold":(wc.total>=0?"green":"red")}">${money(wc.total)}</b></div>${(diff!==null&&Math.abs(diff)>=1)?`<div class="kpiLine noPrint"><span>Investment record se farq</span><b class="gold">${money(diff)}</b></div><p class="hint noPrint">Ye farq tab aata hai jab Market Receivable / Payables page par aisi raqam daali ho jo Sale ya Purchase nahi thi, ya koi entry miss ho.</p>`:""}`;
+ $("cashBreakdown").innerHTML=`<div class="kpiLine"><span>Cash at Period Start</span><b>${money(cashStart)}</b></div><div class="kpiLine"><span>Investments Added</span><b>${money(invP)}</b></div><div class="kpiLine"><span>Collections + Cash Sales + Other Income</span><b>${money(coll+cashSales+other)}</b></div><div class="kpiLine"><span>Cash Purchases + Expenses + Withdrawals + Supplier Payments</span><b>${money(cashPurP+r.exp+wdP+spP)}</b></div><div class="kpiLine"><span>Cash In Hand</span><b>${money(c)}</b></div>`;
+ $("profitBreakdown").innerHTML=`<div class="kpiLine"><span>Sales</span><b>${money(r.sales)}</b></div>${r.other?`<div class="kpiLine"><span>Other Income</span><b>${money(r.other)}</b></div>`:""}<div class="kpiLine"><span>Opening Stock</span><b>${r.start?money(r.start.amount):"Not found"}</b></div><div class="kpiLine"><span>Purchases</span><b>${money(r.pur)}</b></div><div class="kpiLine"><span>Closing Stock</span><b>${r.end?money(r.end.amount):"Not entered"}</b></div><div class="kpiLine"><span>Cost of Goods Sold</span><b>${money(r.cogs)}</b></div><div class="kpiLine"><span>Expenses</span><b>${money(r.exp)}</b></div><div class="kpiLine"><span>Net Profit / Loss</span><b class="${r.profit===null?"gold":(r.profit>=0?"green":"red")}">${money(r.profit)}</b></div>`;
+ let rows=[...db.investments.map(x=>({...x,kind:"Investment",_t:"investments"})),...db.income.map(x=>({...x,kind:isSale(x)?(isCashSale(x)?"Cash Sale":"Credit Sale"):x.type,_t:"income"})),...db.purchases.map(x=>({...x,kind:"Purchase",_t:"purchases"})),...db.expenses.map(x=>({...x,kind:x.category,_t:"expenses"})),...db.withdrawals.map(x=>({...x,kind:"Withdrawal",_t:"withdrawals"})),...db.supplierPayments.map(x=>({...x,kind:"Supplier Payment",note:[x.party,x.note].filter(Boolean).join(" - "),_t:"supplierPayments"}))].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,12);
+ $("recentTable").innerHTML=table(rows,[["date","Date"],["kind","Type"],["note","Detail"],["amount","Amount"]]);
+}
+function renderInvestment(){$("invStats").innerHTML=card("Verified Capital",openingCapital(),"Opening capital","gold")+card("Additional Investment",sum(allEff(db.investments)),"All added capital","gold")+card("Owner Withdrawals",sum(allEff(db.withdrawals)),"Separate from expenses","red");$("invTable").innerHTML=table(db.investments.slice().reverse(),[["date","Date"],["source","Source"],["note","Detail"],["amount","Amount"]],"investments")}
+function renderIncome(){
+ let inc=allEff(db.income);
+ $("incStats").innerHTML=card("Total Sales",sum(inc.filter(isSale)),"Cash + credit sales","blue")+card("Credit Sales",sum(inc.filter(isCreditSale)),"Market mein gayi","gold")+card("Cash Recovery",sum(inc.filter(isColl)),"Actual cash collected","green")+card("Entries",String(db.income.length),"Records","");
+ $("incTable").innerHTML=table(db.income.slice().reverse().map(x=>({...x,pay:isSale(x)?(isCashSale(x)?"Cash":"Credit"):"-"})),[["date","Date"],["type","Type"],["pay","Payment"],["note","Detail"],["amount","Amount"]],"income");
+}
+function renderPurchases(){
+ let p=allEff(db.purchases),latest=latestStock(()=>true);
+ $("purchaseCards").innerHTML=card("Total Purchases",sum(p),"Stock purchased","gold")+card("Cash Purchases",sum(p.filter(isCashPur)),"Paid from cash","red")+card("Credit Purchases",sum(p.filter(isCreditPur)),"Payable","red")+card("Closing Stock",latest?Number(latest.amount):"Not entered",latest?`As on ${fmtDate(latest.date)}`:"","gold");
+ $("purchaseTable").innerHTML=table(db.purchases.slice().reverse(),[["date","Date"],["mode","Payment"],["note","Detail"],["amount","Amount"]],"purchases");
+ $("closingStockTable").innerHTML="<h2>Closing Stock Records</h2>"+table(db.closingStock.slice().reverse(),[["date","Date"],["note","Detail"],["amount","Amount"]],"closingStock");
+}
+function renderExpenses(){$("expStats").innerHTML=card("Total Expenses",sum(allEff(db.expenses)),"All expenses","red")+card("Entries",String(db.expenses.length),"Records","");$("expTable").innerHTML=table(db.expenses.slice().reverse(),[["date","Date"],["category","Category"],["note","Detail"],["amount","Amount"]],"expenses")}
+function renderWithdrawals(){$("withdrawCards").innerHTML=card("Owner Withdrawals",sum(allEff(db.withdrawals)),"Not counted as expense","red")+card("Entries",String(db.withdrawals.length),"Records","");$("withdrawTable").innerHTML=table(db.withdrawals.slice().reverse(),[["date","Date"],["purpose","Purpose"],["note","Detail"],["amount","Amount"]],"withdrawals")}
+function renderRec(){
+ let inc=allEff(db.income),cs=inc.filter(isCreditSale),co=inc.filter(isColl),dues=allEff(db.receivables),op=db.opening.receivable;
+ let open=db.receivables.filter(x=>x.status!=="Paid");
+ $("recStats").innerHTML=card("Market Receivable",arAsOf(today),"Neeche ki table ka total","gold")+card("Credit Sales (+)",sum(cs),`${cs.length} entries`,"blue","income")+card("Wasooli / Collections (−)",sum(co),`${co.length} entries`,"green","income")+card("Other Dues (Open)",sum(open),`${open.length} open entries`,"blue");
+ let rows=[];
+ if(db.opening.verified&&op)rows.push({date:openDate(),kind:"Opening Receivable",detail:"Opening Reconciliation se",plus:op});
+ cs.forEach(x=>rows.push({...x,_t:"income",kind:"Credit Sale",detail:x.note,plus:x.amount}));
+ dues.forEach(x=>rows.push({...x,_t:"receivables",kind:"Other Due ("+(x.status||"Open")+")",detail:[x.party,x.note].filter(Boolean).join(" - "),plus:x.amount,due:true}));
+ co.forEach(x=>rows.push({...x,_t:"income",kind:"Wasooli (Collection)",detail:x.note,minus:x.amount}));
+ rows.sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+ let bal=0;
+ let body=rows.map(r=>{bal+=(Number(r.plus)||0)-(Number(r.minus)||0);
+  let act=r._t?actBtns(r._t,r.id,r.due&&r.status!=="Paid"?`<button class="primary" onclick="markReceived('${r.id}')">Mark Received</button>`:""):`<button class="secondary" onclick="go('reconcile')">Edit</button>`;
+  return `<tr><td>${esc(fmtDate(r.date))}</td><td>${esc(r.kind)}</td><td>${esc(r.detail)}</td><td class="out">${r.plus?money(r.plus):""}</td><td class="in">${r.minus?money(r.minus):""}</td><td class="num">${money(bal)}</td><td class="act">${act}</td></tr>`}).join("");
+ $("recTable").innerHTML=`<h2>Market Receivable Ledger</h2><p class="hint">Market Receivable is table ka total hai: credit sales aur other dues jama (+), wasooli minus (−). Koi ghalat entry ho to yahin se delete karein.</p>`+(rows.length?`<div style="overflow:auto"><table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Udhaar (+)</th><th class="num">Wasooli (−)</th><th class="num">Balance</th><th class="act">Action</th></tr></thead><tbody>${body}</tbody></table></div>`:'<div class="empty">Koi receivable entry nahi.</div>');
+}
+function renderPay(){
+ let open=db.payables.filter(x=>x.status!=="Paid");
+ $("payStats").innerHTML=card("Total Payable",apAsOf(today),"Opening + credit purchases + payables − payments","red")+card("Credit Purchases",sum(allEff(db.purchases).filter(isCreditPur)),"Purchases on credit","gold")+card("Supplier Payments",sum(allEff(db.supplierPayments)),"Paid so far","green");
+ $("payTable").innerHTML="<h2>Other Payables</h2>"+table(db.payables.slice().reverse(),[["date","Date"],["party","Party"],["status","Status"],["amount","Amount"]],"payables",r=>r.status!=="Paid"?`<button class="primary" onclick="markPaid('${r.id}')">Mark Paid</button>`:"");
+ $("spTable").innerHTML="<h2>Supplier Payments</h2>"+table(db.supplierPayments.slice().reverse(),[["date","Date"],["party","Party"],["note","Detail"],["amount","Amount"]],"supplierPayments");
+}
+function cashMoves(from,to){
+ let m=[];
+ between(db.investments,from,to).forEach(x=>m.push({...x,_t:"investments",kind:"Investment",detail:[x.source,x.note].filter(Boolean).join(" - "),inn:x.amount}));
+ between(db.income,from,to).forEach(x=>{if(isColl(x)||isOther(x)||isCashSale(x))m.push({...x,_t:"income",kind:isCashSale(x)?"Cash Sale":x.type,detail:x.note,inn:x.amount})});
+ between(db.purchases,from,to).filter(isCashPur).forEach(x=>m.push({...x,_t:"purchases",kind:"Cash Purchase",detail:x.note,out:x.amount}));
+ between(db.expenses,from,to).forEach(x=>m.push({...x,_t:"expenses",kind:"Expense: "+x.category,detail:x.note,out:x.amount}));
+ between(db.withdrawals,from,to).forEach(x=>m.push({...x,_t:"withdrawals",kind:"Owner Withdrawal",detail:[x.purpose,x.note].filter(Boolean).join(" - "),out:x.amount}));
+ between(db.supplierPayments,from,to).forEach(x=>m.push({...x,_t:"supplierPayments",kind:"Supplier Payment",detail:[x.party,x.note].filter(Boolean).join(" - "),out:x.amount}));
+ return m.sort((a,b)=>a.date.localeCompare(b.date));
+}
+function renderCash(){
+ let {from,to}=getPeriod("cashFrom","cashTo");
+ let start=from?cashAsOf(prevDay(from)):db.opening.cash,moves=cashMoves(from,to);
+ let tin=moves.reduce((s,x)=>s+(Number(x.inn)||0),0),tout=moves.reduce((s,x)=>s+(Number(x.out)||0),0),bal=start;
+ $("cashStats").innerHTML=card("Cash In Hand",cashAsOf(to),`As on ${fmtDate(to)}`,"green")+card("Cash at Period Start",start,from?fmtDate(from):"Opening cash","")+card("Cash In",tin,"Selected period","blue")+card("Cash Out",tout,"Selected period","red");
+ let rows=moves.map(x=>{bal+=(Number(x.inn)||0)-(Number(x.out)||0);return `<tr><td>${esc(fmtDate(x.date))}</td><td>${esc(x.kind)}</td><td>${esc(x.detail)}</td><td class="in">${x.inn?money(x.inn):""}</td><td class="out">${x.out?money(x.out):""}</td><td class="num">${money(bal)}</td><td class="act">${actBtns(x._t,x.id,"")}</td></tr>`}).join("");
+ $("cashTable").innerHTML=`<h2>Cash Ledger (${esc(periodText(from,to))})</h2><div style="overflow:auto"><table><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th class="num">Cash In</th><th class="num">Cash Out</th><th class="num">Balance</th><th class="act">Action</th></tr></thead><tbody><tr><td>${from?esc(fmtDate(from)):esc(fmtDate(openDate()))}</td><td>Opening Balance</td><td></td><td></td><td></td><td class="num">${money(start)}</td><td class="act"></td></tr>${rows||'<tr><td colspan="7" class="empty">Is period mein koi cash entry nahi.</td></tr>'}</tbody></table></div>`;
+}
+function renderReports(){
+ let {from,to}=getPeriod("repFrom","repTo"),r=profitFor(from,to),cur=currentInvestment(to);
+ let h=setHeads(from,to);$("repBusiness").textContent=h.b;$("repPeriod").textContent=h.p;
+ $("repStats").innerHTML=card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold")+card("Sales",r.sales,"Selected period","blue")+card("Cost of Goods Sold",r.cogs,"Opening stock + purchases - closing stock","gold")+card("Expenses",r.exp,"Selected period","red")+card("Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"))+card("Mojooda Investment (Circle mein)",workingCapital(to).total,"Cash + Bank + Stock + Lena − Dena","green")+card("Cash In Hand",cashAsOf(to),`As on ${fmtDate(to)}`,"green")+card("Receivable",arAsOf(to),"Lena hai","gold")+card("Payable",apAsOf(to),"Dena hai","red");
+ const L=(a,b,c)=>`<div class="kpiLine"><span>${a}</span><b class="${c||""}">${b}</b></div>`;
+ $("monthlyReport").innerHTML="<h2>Profit &amp; Loss</h2>"+L("Sales",money(r.sales))+(r.other?L("Other Income",money(r.other)):"")+L("Opening Stock",r.start?money(r.start.amount):"Not found")+L("Purchases",money(r.pur))+L("Closing Stock",r.end?`${money(r.end.amount)} (${esc(r.end.label)})`:"Not entered")+L("Cost of Goods Sold",money(r.cogs))+L("Expenses",money(r.exp))+L("Net Profit / Loss",money(r.profit),r.profit===null?"gold":(r.profit>=0?"green":"red"));
+ let cats={};between(db.expenses,from,to).forEach(x=>cats[x.category]=(cats[x.category]||0)+Number(x.amount||0));
+ let catHtml=Object.keys(cats).sort((a,b)=>cats[b]-cats[a]).map(k=>L(esc(k),money(cats[k]))).join("")||'<div class="empty">No expenses in this period.</div>';
+ $("categoryReport").innerHTML="<h2>Expenses by Category</h2>"+catHtml;
+ let months={};const M=k=>months[k]=months[k]||{sales:0,coll:0,pur:0,exp:0};
+ between(db.income,from,to).forEach(x=>{let m=M(x.date.slice(0,7));if(isSale(x))m.sales+=Number(x.amount);if(isColl(x))m.coll+=Number(x.amount)});
+ between(db.purchases,from,to).forEach(x=>M(x.date.slice(0,7)).pur+=Number(x.amount));
+ between(db.expenses,from,to).forEach(x=>M(x.date.slice(0,7)).exp+=Number(x.amount));
+ let keys=Object.keys(months).sort();
+ $("yearlyReport").innerHTML="<h2>Month-wise Summary</h2>"+(keys.length?`<div style="overflow:auto"><table><thead><tr><th>Month</th><th class="num">Sales</th><th class="num">Collections</th><th class="num">Purchases</th><th class="num">Expenses</th></tr></thead><tbody>${keys.map(k=>{let m=months[k];return `<tr><td>${k.slice(5)}-${k.slice(0,4)}</td><td class="num">${money(m.sales)}</td><td class="num">${money(m.coll)}</td><td class="num">${money(m.pur)}</td><td class="num">${money(m.exp)}</td></tr>`}).join("")}</tbody></table></div>`:'<div class="empty">No records in this period.</div>');
+}
+function renderSettings(){$("setBusiness").value=db.settings.business;$("setCurrency").value=db.settings.currency;$("setOwner").value=db.settings.owner;$("setContact").value=db.settings.contact}
+function saveSettings(){db.settings={business:$("setBusiness").value||"My Business",currency:$("setCurrency").value||"Rs.",owner:$("setOwner").value,contact:$("setContact").value};save();$("brandName").textContent=db.settings.business;renderAll();toast("Settings saved")}
+function clearAllData(){
+ if(!confirm("Saara data delete ho jayega. Pehle Backup le lein. Continue?"))return;
+ if(!confirm("Pakka? Ye wapas nahi aayega."))return;
+ db=blankDb();save();location.reload();
+}
+function renderAll(){renderExpReport();renderDashboard();renderReconcile();renderInvestment();renderIncome();renderPurchases();renderExpenses();renderWithdrawals();renderRec();renderPay();renderCash();renderReports();renderSettings()}
+function doPrint(title){
+ toast("PDF ke liye print window mein Destination: \"Save as PDF\" chunein");
+ let old=document.title;document.title=title;
+ setTimeout(()=>{window.print();document.title=old;document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))},80);
+}
+function printPage(){
+ let p=document.querySelector(".page.active").id,name=$("pageTitle").textContent;
+ if(p==="dashboard")renderDashboard();if(p==="reports")renderReports();if(p==="cash")renderCash();
+ $("phBiz").textContent=db.settings.business||"Business";
+ $("phTitle").textContent=name;
+ $("phInfo").textContent=(p==="cash"?`Period: ${periodText($("cashFrom").value,$("cashTo").value||today)} | `:"")+`Printed: ${fmtDate(today)}`;
+ doPrint(`${db.settings.business||"Business"} - ${name} - ${fmtDate(today)}`);
+}
+function printDashboard(){go("dashboard");printPage()}
+function printReports(){go("reports");printPage()}
+function printExpReport(){
+ renderExpReport();
+ $("phBiz").textContent=db.settings.business||"Business";$("phTitle").textContent=expReportTitle();$("phInfo").textContent=`Printed: ${fmtDate(today)}`;
+ document.body.classList.add("printOnly");$("expReportPanel").classList.add("printTarget");
+ doPrint(`${db.settings.business||"Business"} - ${expReportTitle()}`);
+}
+window.addEventListener("afterprint",()=>{document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))});
+
+// ---------- Expense report (monthly / yearly) ----------
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function expReportTitle(){
+ if($("expRepType").value==="year")return `Expense Report - Year ${$("expRepYear").value}`;
+ let [y,m]=($("expRepMonth").value||today.slice(0,7)).split("-");return `Expense Report - ${MONTHS[Number(m)-1]} ${y}`;
+}
+function renderExpReport(){
+ let yearly=$("expRepType").value==="year";
+ $("expRepMonthField").style.display=yearly?"none":"";$("expRepYearField").style.display=yearly?"":"none";
+ let all=allEff(db.expenses),html=`<h3 class="repTitle">${esc(expReportTitle())}</h3>`;
+ if(!yearly){
+  let m=$("expRepMonth").value||today.slice(0,7);
+  let rows=all.filter(x=>x.date.slice(0,7)===m).sort((a,b)=>a.date.localeCompare(b.date));
+  html+=rows.length?`<div style="overflow:auto"><table><thead><tr><th>Date</th><th>Category</th><th>Detail</th><th class="num">Amount</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(fmtDate(x.date))}</td><td>${esc(x.category)}</td><td>${esc(x.note)}</td><td class="num">${money(x.amount)}</td></tr>`).join("")}<tr class="totalRow"><td colspan="3"><b>Total</b></td><td class="num"><b>${money(sum(rows))}</b></td></tr></tbody></table></div>`:'<div class="empty">Is month mein koi expense nahi.</div>';
+ }else{
+  let y=String($("expRepYear").value||today.slice(0,4));
+  let rows=all.filter(x=>x.date.slice(0,4)===y);
+  let cats=[...new Set(rows.map(x=>x.category||"Other"))];
+  cats.sort((a,b)=>{let ia=EXP_CATS.indexOf(a),ib=EXP_CATS.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});
+  let tot=(f)=>rows.filter(f).reduce((s,x)=>s+(Number(x.amount)||0),0);
+  html+=rows.length?`<div style="overflow:auto"><table class="expMatrix"><thead><tr><th>Month</th>${cats.map(c=>`<th class="num">${esc(c)}</th>`).join("")}<th class="num">Month Total</th></tr></thead><tbody>${MONTHS.map((mn,i)=>{let mm=`${y}-${String(i+1).padStart(2,"0")}`;let inM=x=>x.date.slice(0,7)===mm;return `<tr><td>${mn}</td>${cats.map(c=>{let v=tot(x=>inM(x)&&(x.category||"Other")===c);return `<td class="num">${v?money(v):"-"}</td>`}).join("")}<td class="num"><b>${money(tot(inM))}</b></td></tr>`}).join("")}<tr class="totalRow"><td><b>Year Total</b></td>${cats.map(c=>`<td class="num"><b>${money(tot(x=>(x.category||"Other")===c))}</b></td>`).join("")}<td class="num"><b>${money(sum(rows))}</b></td></tr></tbody></table></div>`:'<div class="empty">Is saal mein koi expense nahi.</div>';
+ }
+ $("expReport").innerHTML=html;
+}
+
+// ---------- Edit any entry ----------
+const EXP_CATS=["Rent","Salary","Transport","Utilities","Food","Repair","Marketing","Other"];
+const F_DATE=["date","Date","date"],F_AMT=["amount","Amount (Rs.)","number"],F_NOTE=["note","Note / Detail","textarea"];
+const FIELDS={
+ investments:[F_DATE,F_AMT,["source","Source / Investor","text"],F_NOTE],
+ income:[F_DATE,F_AMT,["type","Type","select",["Sale","Cash Collection","Other Income"]],["mode","Sale Payment (sirf Sale ke liye)","select",["Credit (Udhaar)","Cash Received"]],F_NOTE],
+ purchases:[F_DATE,F_AMT,["mode","Payment","select",["Cash Paid","Credit / Payable"]],F_NOTE],
+ closingStock:[F_DATE,F_AMT,F_NOTE],
+ expenses:[F_DATE,F_AMT,["category","Category","select",EXP_CATS],F_NOTE],
+ withdrawals:[F_DATE,F_AMT,["purpose","Purpose","text"],F_NOTE],
+ receivables:[F_DATE,["party","Customer / Party","text"],F_AMT,F_NOTE],
+ payables:[F_DATE,["party","Party","text"],F_AMT,F_NOTE],
+ supplierPayments:[F_DATE,["party","Supplier / Party","text"],F_AMT,F_NOTE]
+};
+const EDIT_NAMES={investments:"Investment",income:"Sale / Collection",purchases:"Purchase",closingStock:"Closing Stock",expenses:"Expense",withdrawals:"Withdrawal",receivables:"Receivable",payables:"Payable",supplierPayments:"Supplier Payment"};
+function actBtns(type,id,extra){return `<div class="rowBtns">${extra||""}<button class="secondary" onclick="openEdit('${type}','${id}')">Edit</button><button class="secondary" onclick="del('${type}','${id}')">Delete</button></div>`}
+let editing=null;
+function openEdit(type,id){
+ let rec=(db[type]||[]).find(x=>x.id===id),f=FIELDS[type];if(!rec||!f)return;
+ editing={type,id};
+ $("editTitle").textContent=`Edit ${EDIT_NAMES[type]||"Entry"}`;
+ $("editFields").innerHTML=f.map(([k,label,kind,opts])=>{
+  let v=rec[k]??"";
+  if(kind==="select"){let o=opts.slice();if(k==="mode"&&type==="income"&&!v)v="Credit (Udhaar)";if(v&&!o.includes(v))o.push(v);return `<div class="field"><label>${label}</label><select id="ef_${k}">${o.map(x=>`<option ${x===v?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`}
+  if(kind==="textarea")return `<div class="field wide"><label>${label}</label><textarea id="ef_${k}">${esc(v)}</textarea></div>`;
+  return `<div class="field"><label>${label}</label><input id="ef_${k}" type="${kind}" ${kind==="number"?'min="0" step=".01"':""} value="${esc(v)}"></div>`;
+ }).join("");
+ $("editModal").style.display="flex";
+}
+function closeEdit(){$("editModal").style.display="none";editing=null}
+function saveEdit(){
+ if(!editing)return;let {type,id}=editing,rec=db[type].find(x=>x.id===id);if(!rec)return closeEdit();
+ let upd={};FIELDS[type].forEach(([k,,kind])=>{let v=$("ef_"+k).value;upd[k]=kind==="number"?Number(v):v});
+ if(!upd.date){toast("Date select karein");return}
+ if(!(upd.amount>0)){toast("Enter a valid amount");return}
+ if(type==="income"&&upd.type!=="Sale")upd.mode="";
+ Object.assign(rec,upd);
+ // keep linked collection / payment amounts in step
+ if(type==="receivables"&&rec.linkId){let c=db.income.find(x=>x.id===rec.linkId);if(c)c.amount=rec.amount}
+ if(type==="payables"&&rec.linkId){let c=db.supplierPayments.find(x=>x.id===rec.linkId);if(c)c.amount=rec.amount}
+ if(type==="income"&&rec.receivableId){let c=db.receivables.find(x=>x.id===rec.receivableId);if(c)c.amount=rec.amount}
+ if(type==="supplierPayments"&&rec.payableId){let c=db.payables.find(x=>x.id===rec.payableId);if(c)c.amount=rec.amount}
+ save();closeEdit();renderAll();toast("Entry updated");
+}
+function exportData(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download=`Business_Finance_Backup_${today}.json`;a.click()}
+function restoreData(e){
+ let f=e.target.files[0];if(!f)return;let r=new FileReader();
+ r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||typeof d!=="object"||!(d.settings||d.opening||d.income))throw 0;db=normalize(d);save();location.reload()}catch(err){toast("Invalid backup file")}};
+ r.readAsText(f);e.target.value="";
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.page));
+$("todayText").textContent=new Date().toLocaleDateString("en-PK",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+["invDate","incDate","expDate","recDate","payDate","spDate","purchaseDate","closingStockDate","withdrawDate","reconDate"].forEach(id=>{if($(id))$(id).value=today});
+["dashFrom","cashFrom","repFrom"].forEach(id=>$(id).value=openDate());
+["dashTo","cashTo","repTo"].forEach(id=>$(id).value=today);
+$("expRepMonth").value=today.slice(0,7);$("expRepYear").value=today.slice(0,4);
+document.body.dataset.page="dashboard";
+$("brandName").textContent=db.settings.business||"Business Finance OS";
+renderAll();
+
+</script>
