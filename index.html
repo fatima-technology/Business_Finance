@@ -142,6 +142,29 @@ body.roleOperator .adminOnly{display:none!important}
  }
  .side.open nav button{display:block}
 }
+/* Welcome / loading screen */
+.welcome{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;background:radial-gradient(circle at 50% 20%,#14385a 0%,#08182a 45%,#040b14 100%);transition:opacity .5s ease}
+.welcome.hide{opacity:0;pointer-events:none}
+.welOrb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;animation:welFloat 9s ease-in-out infinite}
+.welOrb.o1{width:320px;height:320px;background:#26d6a1;left:-80px;top:-60px}
+.welOrb.o2{width:380px;height:380px;background:#1c8eea;right:-110px;bottom:-120px;animation-delay:-4s}
+@keyframes welFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,25px)}}
+.welBox{position:relative;text-align:center;width:min(420px,100%);padding:38px 28px 30px;border-radius:22px;background:#0d1b2dcc;border:1px solid #24405e;box-shadow:0 25px 60px #000a;backdrop-filter:blur(6px);animation:welIn .7s ease both}
+@keyframes welIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.welMark{width:78px;height:78px;margin:0 auto 18px;border-radius:22px;background:linear-gradient(135deg,var(--accent),#1689ff);display:grid;place-items:center;font-weight:900;font-size:28px;color:#04111b;animation:welPulse 2.2s ease-in-out infinite}
+@keyframes welPulse{0%,100%{box-shadow:0 0 0 0 #26d6a166}50%{box-shadow:0 0 0 16px #26d6a100}}
+.welHi{margin:0;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700}
+.welBox h1{margin:8px 0 4px;font-size:26px}
+.welSub{margin:0;color:var(--muted);font-size:14px}
+.welChips{display:flex;justify-content:center;gap:8px;margin:20px 0 24px;flex-wrap:wrap}
+.welChips span{padding:6px 12px;border-radius:20px;background:#142b41;border:1px solid #24405e;color:#bcd3e6;font-size:12px}
+.welBar{height:6px;border-radius:10px;background:#17283b;overflow:hidden;position:relative}
+.welBar i{position:absolute;top:0;bottom:0;width:40%;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--blue));animation:welLoad 1.3s ease-in-out infinite}
+@keyframes welLoad{0%{left:-40%}100%{left:100%}}
+.welMsg{margin:12px 0 0;font-size:13px;color:#9db2c7;min-height:18px}
+.welMsg.err{color:#ff8a8a}
+.welcome.error .welBar{display:none}
+@media print{.welcome{display:none!important}}
 </style>
 </head>
 <body>
@@ -360,6 +383,18 @@ body.roleOperator .adminOnly{display:none!important}
 </div>
 <div class="toast" id="toast"></div>
 <img id="printLogo" alt="">
+<div class="welcome" id="welcomeScreen">
+ <div class="welOrb o1"></div><div class="welOrb o2"></div>
+ <div class="welBox">
+  <div class="welMark">BF</div>
+  <p class="welHi">Khush Aamdeed</p>
+  <h1 id="welBiz">Business Finance OS</h1>
+  <p class="welSub">Aap ka hisaab, har device par</p>
+  <div class="welChips"><span>Cash</span><span>Investment</span><span>Profit</span></div>
+  <div class="welBar"><i></i></div>
+  <p class="welMsg" id="welMsg">Online data load ho raha hai...</p>
+ </div>
+</div>
 <div class="authScreen" id="authScreen">
  <div class="authBox panel">
   <div class="logo"><div class="logoMark">BF</div><div><b>Business Finance OS</b><small>Cash • Investment • Profit</small></div></div>
@@ -995,8 +1030,8 @@ function cloudSave(){
  return cloudDoc.set({data:j,updated:Date.now()}).catch(e=>toast("Online save nahi hua: "+(e.code||e.message)));
 }
 async function cloudStart(){
- $("authScreen").style.display="flex";$("authSetup").style.display="none";$("authLogin").style.display="none";
- $("authMsg").textContent="Online data load ho raha hai...";
+ let wel=$("welcomeScreen");
+ if(db.settings.business&&db.settings.business!=="My Business")$("welBiz").textContent=db.settings.business;
  try{
   if(!window.firebase)throw new Error("Firebase load nahi hua");
   firebase.initializeApp(firebaseConfig);
@@ -1019,10 +1054,13 @@ async function cloudStart(){
    renderAll();
   });
  }catch(e){
-  $("authMsg").innerHTML=`Online data load nahi hua. Internet check karein.<br><button class="primary authBtn" onclick="location.reload()">Dobara Koshish</button>`;
+  wel.classList.add("error");$("welMsg").classList.add("err");
+  $("welMsg").innerHTML=`Online data load nahi hua. Internet check karein.<br><button class="primary authBtn" onclick="location.reload()">Dobara Koshish</button>`;
   return;
  }
- $("authMsg").textContent="";
+ if(db.settings.business&&db.settings.business!=="My Business")$("welBiz").textContent=db.settings.business;
+ $("welMsg").textContent="Tayyar hai!";
+ setTimeout(()=>{wel.classList.add("hide");setTimeout(()=>wel.style.display="none",500)},400);
  ["dashFrom","cashFrom","repFrom"].forEach(id=>$(id).value=openDate());
  $("brandName").textContent=db.settings.business||"Business Finance OS";
  renderAll();
