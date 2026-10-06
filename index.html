@@ -398,6 +398,8 @@ body.roleOperator .adminOnly{display:none!important}
 </div>
 
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const KEY="business_finance_os_final_v3";
 const $=id=>document.getElementById(id);
@@ -421,7 +423,7 @@ let db;try{db=normalize(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){
 function localDate(d){d=d||new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 const today=localDate();
 function prevDay(d){let t=new Date(d+"T00:00:00");t.setDate(t.getDate()-1);return localDate(t)}
-function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));return cloudSave()}
 function uid(){return Date.now()+Math.random().toString(16).slice(2)}
 function money(n){if(n===null||n===undefined)return "Not Established";return `${db.settings.currency||"Rs."} ${Number(n||0).toLocaleString("en-PK",{minimumFractionDigits:2,maximumFractionDigits:2})}`}
 function sum(a){return a.reduce((x,y)=>x+(Number(y.amount)||0),0)}
@@ -701,7 +703,7 @@ function saveSettings(){if(!isAdmin())return;db.settings={...db.settings,busines
 function clearAllData(){if(!isAdmin())return;
  if(!confirm("Saara data delete ho jayega. Pehle Backup le lein. Continue?"))return;
  if(!confirm("Pakka? Ye wapas nahi aayega."))return;
- let keep=db.users;db=blankDb();db.users=keep;save();location.reload();
+ let keep=db.users;db=blankDb();db.users=keep;Promise.resolve(save()).finally(()=>location.reload());
 }
 function renderAll(){renderExpReport();renderDashboard();renderReconcile();renderInvestment();renderIncome();renderPurchases();renderExpenses();renderWithdrawals();renderRec();renderPay();renderCash();renderReports();renderSettings()}
 function doPrint(title){
@@ -800,7 +802,7 @@ function saveEdit(){
 function exportData(){if(!isAdmin())return;let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download=`Business_Finance_Backup_${today}.json`;a.click()}
 function restoreData(e){if(!isAdmin())return;
  let f=e.target.files[0];if(!f)return;let r=new FileReader();
- r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||typeof d!=="object"||!(d.settings||d.opening||d.income))throw 0;if(!Array.isArray(d.users)||!d.users.length)d.users=db.users;db=normalize(d);save();location.reload()}catch(err){toast("Invalid backup file")}};
+ r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||typeof d!=="object"||!(d.settings||d.opening||d.income))throw 0;if(!Array.isArray(d.users)||!d.users.length)d.users=db.users;db=normalize(d);Promise.resolve(save()).finally(()=>location.reload())}catch(err){toast("Invalid backup file")}};
  r.readAsText(f);e.target.value="";
 }
 
@@ -977,6 +979,56 @@ function initAuth(){
  if(u){currentUser=u;applyRole()}else showAuth();
 }
 
+// ---------- Firebase (online data) ----------
+const firebaseConfig={
+ apiKey:"AIzaSyCqVZKPmmaMDbnByXwmdJHD-AgqidJ4dc8",
+ authDomain:"business-finance-os.firebaseapp.com",
+ projectId:"business-finance-os",
+ storageBucket:"business-finance-os.firebasestorage.app",
+ messagingSenderId:"715169704063",
+ appId:"1:715169704063:web:100395a7e6dd095bf8f74a"
+};
+let cloudDoc=null,cloudReady=false,lastCloudJson="";
+function cloudSave(){
+ if(!cloudDoc||!cloudReady)return Promise.resolve();
+ let j=JSON.stringify(db);lastCloudJson=j;
+ return cloudDoc.set({data:j,updated:Date.now()}).catch(e=>toast("Online save nahi hua: "+(e.code||e.message)));
+}
+async function cloudStart(){
+ $("authScreen").style.display="flex";$("authSetup").style.display="none";$("authLogin").style.display="none";
+ $("authMsg").textContent="Online data load ho raha hai...";
+ try{
+  if(!window.firebase)throw new Error("Firebase load nahi hua");
+  firebase.initializeApp(firebaseConfig);
+  cloudDoc=firebase.firestore().collection("bfos").doc("main");
+  let s=await Promise.race([cloudDoc.get(),new Promise((_,rj)=>setTimeout(()=>rj(new Error("timeout")),15000))]);
+  let j=s.exists?(s.data()||{}).data:null;
+  if(j){
+   let local=localStorage.getItem(KEY);
+   if(local&&!localStorage.getItem(KEY+"_before_cloud"))localStorage.setItem(KEY+"_before_cloud",local);
+   lastCloudJson=j;db=normalize(JSON.parse(j));localStorage.setItem(KEY,JSON.stringify(db));
+  }
+  cloudReady=true;
+  if(!j&&db.users.length)await cloudSave();
+  cloudDoc.onSnapshot(sn=>{
+   if(!sn.exists||sn.metadata.hasPendingWrites)return;
+   let nj=(sn.data()||{}).data;if(!nj||nj===lastCloudJson)return;
+   lastCloudJson=nj;db=normalize(JSON.parse(nj));localStorage.setItem(KEY,JSON.stringify(db));
+   if(currentUser){let u=db.users.find(x=>x.id===currentUser.id);if(!u){logout();return}currentUser=u;applyRole()}
+   $("brandName").textContent=db.settings.business||"Business Finance OS";
+   renderAll();
+  });
+ }catch(e){
+  $("authMsg").innerHTML=`Online data load nahi hua. Internet check karein.<br><button class="primary authBtn" onclick="location.reload()">Dobara Koshish</button>`;
+  return;
+ }
+ $("authMsg").textContent="";
+ ["dashFrom","cashFrom","repFrom"].forEach(id=>$(id).value=openDate());
+ $("brandName").textContent=db.settings.business||"Business Finance OS";
+ renderAll();
+ initAuth();
+}
+
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.page));
 $("todayText").textContent=new Date().toLocaleDateString("en-PK",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 ["invDate","incDate","expDate","recDate","payDate","spDate","purchaseDate","closingStockDate","withdrawDate","reconDate"].forEach(id=>{if($(id))$(id).value=today});
@@ -986,6 +1038,6 @@ $("expRepMonth").value=today.slice(0,7);$("expRepYear").value=today.slice(0,4);
 document.body.dataset.page="dashboard";
 $("brandName").textContent=db.settings.business||"Business Finance OS";
 renderAll();
-initAuth();
+cloudStart();
 
 </script>
