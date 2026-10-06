@@ -30,6 +30,17 @@ table{width:100%;border-collapse:collapse}th,td{padding:11px 9px;border-bottom:1
 th.num{text-align:right}td.in{color:var(--accent);text-align:right}td.out{color:var(--red);text-align:right}
 .rowBtns{display:flex;gap:6px;flex-wrap:wrap}
 tr.oldRow td{opacity:.45}
+body.roleOperator .adminOnly{display:none!important}
+.userBadge{align-self:center;font-size:13px;color:#8ea5bc;padding:0 6px;white-space:nowrap}
+.authScreen{display:none;position:fixed;inset:0;z-index:500;background:radial-gradient(circle at top,#12304a,#050d16 70%);align-items:center;justify-content:center;padding:16px}
+.authBox{width:min(400px,100%);display:flex;flex-direction:column;gap:12px}.authBox .logo{border:0;margin:0 0 4px;padding:0}.authBox h2{margin:6px 0 0}.authBox .field{display:flex;flex-direction:column;gap:6px}
+.authBox input{background:#081522;border:1px solid #29425c;color:white;padding:11px 12px;border-radius:9px;font-size:14px;outline:none}.authBox input:focus{border-color:#0f8f74}.authBox label{font-size:13px;color:#8ea5bc}.authBtn{width:100%;margin-top:6px;padding:12px}.authMsg{color:#ff8a8a;min-height:18px;margin:0;font-size:13px}
+.logoRow{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.logoThumb{width:120px;height:80px;border:1px dashed #3a5878;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#8ea5bc;font-size:12px;background:#fff1;overflow:hidden}.logoThumb img{max-width:100%;max-height:100%}
+.lgModal{width:min(860px,100%);display:grid;grid-template-columns:minmax(220px,1fr) auto;column-gap:22px;align-content:start}.lgModal>*{grid-column:1;align-self:start}.lgModal .pagePrev{grid-column:2;grid-row:1/span 4;margin:0!important}.lgTools{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}.lgTools select{width:100%;min-width:0}@media(max-width:760px){.lgModal{display:block}.lgModal .pagePrev{margin:10px auto!important;width:100%}}.lgTools .field{display:flex;flex-direction:column;gap:6px}.lgTools select{background:#081522;border:1px solid #29425c;color:white;padding:10px;border-radius:8px}.lgTools input[type=range]{width:100%;padding:0}
+.pagePrev{position:relative;width:min(420px,56vh);aspect-ratio:192/279;margin:8px auto 4px;background:#fff;border-radius:4px;box-shadow:0 6px 24px #000a;overflow:hidden;touch-action:none}
+#mockPage{position:absolute;left:0;top:0;width:726px;height:1055px;transform-origin:0 0;pointer-events:none}
+#lgImg{position:absolute;cursor:grab;outline:2px dashed #0f8f74;outline-offset:2px;user-select:none;touch-action:none}#lgImg:active{cursor:grabbing}
+#printLogo{display:none}
 .modalBg{display:none;position:fixed;inset:0;background:#000a;z-index:200;align-items:center;justify-content:center;padding:15px}.modal{width:min(760px,100%);max-height:90vh;overflow:auto;box-shadow:var(--shadow)}
 .printHead{display:none}.repTitle{margin:6px 0 10px;font-size:16px}tr.totalRow td{border-top:2px solid #3a5878}
 .filters select{background:#081522;border:1px solid #29425c;color:white;padding:10px;border-radius:8px}
@@ -56,6 +67,8 @@ tr.oldRow td{opacity:.45}
  .main{margin:0!important;width:100%!important;padding:0!important}
  .page{display:none!important}
  .page.active{display:block!important}
+ .authScreen,.userBadge{display:none!important}
+ #printLogo.show{display:block!important;position:fixed;z-index:50;height:auto}
  .act,.modalBg,.toast{display:none!important}
  .printHead{display:block!important;text-align:center;margin:0 0 10px}
  .printHead h1{margin:0;font-size:20px;color:#111}.printHead h2{margin:3px 0;font-size:14px;color:#111}.printHead p{margin:2px;font-size:10px;color:#555}
@@ -75,7 +88,7 @@ tr.oldRow td{opacity:.45}
  .page.active .grid{grid-template-columns:repeat(4,1fr)!important;gap:6px!important}
  #reports .two{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
  .panel h2{color:#111!important}.kpiLine{border-color:#ddd!important}
- #dashboard .printSummary{display:block!important;margin:0 0 9px}
+ #dashboard .printSummary{display:none!important}
  .printSummaryTitle{font-size:13px;font-weight:800;text-align:center;margin-bottom:5px}
  .printSummaryTable{width:100%;border-collapse:collapse;font-size:10px}
  .printSummaryTable td{border:1px solid #bbb;padding:5px 6px;color:#111!important}
@@ -91,6 +104,24 @@ tr.oldRow td{opacity:.45}
  #dashboard .panel h2{font-size:11px!important}
  #dashboard .kpiLine{font-size:9px!important;padding:3px 0!important}
  #dashboard .section:last-child{display:none!important}
+ #dashboard .two,#dashboard #wcPanel{display:none!important}
+ #dashboard *{transition:none!important}
+ #dashboard .reportHead{display:flex!important;justify-content:space-between;align-items:flex-end;text-align:left!important;border-bottom:2.5px solid #0f8f74;padding:0 0 9px!important;margin:2px 0 16px!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #dashboard .reportHead h1{font-size:23px!important;color:#10243a!important;font-weight:800;margin:0!important}
+ #dashboard .reportHead h1::after{content:"Business Dashboard";display:block;font-size:9.5px;letter-spacing:2.5px;text-transform:uppercase;color:#0f8f74;font-weight:700;margin-top:4px}
+ #dashboard .reportHead p{font-size:9.5px!important;color:#5b6b7a!important;text-align:right;margin:0!important;line-height:1.6}
+ #dashboard #dashCards{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important;margin:0!important}
+ #dashboard #dashCards .card{position:relative;overflow:hidden;padding:13px 14px 12px 19px!important;min-height:0!important;border:1px solid #d6dee6!important;border-radius:9px!important;background:#f7fafc!important;box-shadow:none!important;transform:none!important;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #dashboard #dashCards .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#10243a}
+ #dashboard #dashCards .card:has(.value.green)::before{background:#0f8f74}
+ #dashboard #dashCards .card:has(.value.red)::before{background:#c0392b}
+ #dashboard #dashCards .card:has(.value.gold)::before{background:#c98a00}
+ #dashboard #dashCards .card:has(.value.blue)::before{background:#2563eb}
+ #dashboard #dashCards .label{font-size:8.5px!important;letter-spacing:1.2px;color:#5b6b7a!important;font-weight:700}
+ #dashboard #dashCards .value{font-size:17px!important;font-weight:800;margin:7px 0 5px!important;color:#10243a!important}
+ #dashboard #dashCards .value.green{color:#0b7a5c!important}#dashboard #dashCards .value.red{color:#b42318!important}#dashboard #dashCards .value.gold{color:#8a5a00!important}#dashboard #dashCards .value.blue{color:#1d4ed8!important}
+ #dashboard #dashCards .sub{font-size:8px!important;color:#6b7785!important;line-height:1.35}
+ #dashboard #dashCards::after{content:"Business Finance OS";grid-column:1/-1;text-align:center;font-size:8px;color:#9aa6b2;letter-spacing:1px;margin-top:10px}
  th,td{color:#111!important;border-color:#ddd!important}
  .green,.red,.gold,.blue{color:#111!important}
 }
@@ -120,7 +151,7 @@ tr.oldRow td{opacity:.45}
  <div class="logo"><div class="logoMark">BF</div><div><b id="brandName">Business Finance OS</b><small>Cash • Investment • Profit</small></div></div>
  <nav>
   <button class="active" data-page="dashboard">⌂ Dashboard</button>
-  <button data-page="reconcile">◎ Opening Reconciliation</button>
+  <button data-page="reconcile" class="adminOnly">◎ Opening Reconciliation</button>
   <button data-page="investment">↗ Capital / Investment</button>
   <button data-page="income">↙ Sales / Collections</button>
   <button data-page="purchases">↗ Purchases / Stock</button>
@@ -130,13 +161,13 @@ tr.oldRow td{opacity:.45}
   <button data-page="payable">◉ Payables</button>
   <button data-page="cash">▣ Cash Ledger</button>
   <button data-page="reports">▤ Financial Reports</button>
-  <button data-page="settings">⚙ Business Settings</button>
+  <button data-page="settings" class="adminOnly">⚙ Business Settings</button>
  </nav>
 </aside>
 <main class="main">
  <div class="top">
   <div><button class="secondary mobileMenu" onclick="toggleSide()">☰</button><h1 id="pageTitle">Business Dashboard</h1><p id="todayText"></p></div>
-  <div class="actions"><button class="secondary" onclick="exportData()">Backup</button><button class="secondary" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button></div>
+  <div class="actions"><span class="userBadge" id="userBadge"></span><button class="secondary adminOnly" onclick="exportData()">Backup</button><button class="secondary adminOnly" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button><button class="secondary" onclick="logout()">Logout</button></div>
  </div>
 
  <div class="printHead" id="printHead"><h1 id="phBiz"></h1><h2 id="phTitle"></h2><p id="phInfo"></p></div>
@@ -198,6 +229,8 @@ tr.oldRow td{opacity:.45}
    <div class="field"><label>Amount (Rs.)</label><input type="number" id="incAmount" min="0" step="0.01"></div>
    <div class="field"><label>Type</label><select id="incType"><option>Sale</option><option>Cash Collection</option><option>Other Income</option></select></div>
    <div class="field"><label>Sale Payment (sirf Sale ke liye)</label><select id="incMode"><option>Credit (Udhaar)</option><option>Cash Received</option></select></div>
+   <div class="field"><label>ERP Munafa (sirf Sale ke liye)</label><input type="number" id="incErp" step=".01" placeholder="ERP mein jo munafa aa raha hai"></div>
+   <div class="field"><label>Discount (sirf Sale ke liye)</label><input type="number" id="incDisc" min="0" step=".01" placeholder="Bill par diya gaya discount"></div>
    <div class="field wide"><label>Customer / Detail</label><textarea id="incNote" placeholder="Customer, invoice or income detail..."></textarea></div>
   </div><div class="formActions"><button class="primary" onclick="saveIncome()">Save Income</button></div><div class="formActions"><button class="secondary" onclick="saveCollection()">Record Market Collection</button></div></div>
   <div class="grid section" id="incStats"></div><div class="panel section" id="incTable"></div>
@@ -307,11 +340,58 @@ tr.oldRow td{opacity:.45}
    <div class="field"><label>Business Name</label><input id="setBusiness"></div><div class="field"><label>Currency</label><input id="setCurrency" value="Rs."></div><div class="field"><label>Owner / Manager</label><input id="setOwner"></div>
    <div class="field wide"><label>Business Address / Contact</label><textarea id="setContact"></textarea></div>
   </div><div class="formActions"><button class="primary" onclick="saveSettings()">Save Settings</button><button class="secondary" onclick="clearAllData()">Clear All Data</button></div></div>
-  <div class="panel section"><h3>Calculation Rules</h3><div class="kpiLine"><span>Cash in Hand</span><b>Opening Cash + Investment + Cash Sales + Collections + Other Income − Cash Purchases − Expenses − Withdrawals − Supplier Payments</b></div><div class="kpiLine"><span>Cost of Goods Sold</span><b>Opening Stock + Purchases − Closing Stock</b></div><div class="kpiLine"><span>Net Profit</span><b>Sales + Other Income − Cost of Goods Sold − Expenses</b></div><div class="kpiLine"><span>Market Receivable</span><b>Opening Receivable + Credit Sales + Other Dues − Collections</b></div><div class="kpiLine"><span>Payable</span><b>Opening Payable + Credit Purchases + Other Payables − Supplier Payments</b></div><div class="kpiLine"><span>Current Business Investment</span><b>Opening Capital + Added Investment + Profit − Withdrawals</b></div><div class="kpiLine"><span>Mojooda Investment (Circle mein)</span><b>Cash + Bank + Stock + Market Receivable − Payable</b></div><div class="kpiLine"><span>Opening Date</span><b>Opening date se pehle ki entries hisaab mein shamil nahi hoti</b></div></div>
+  <div class="panel form section adminOnly"><h2>Users</h2><p class="hint"><b>Admin</b> sab kuch kar sakta hai. <b>Operator</b> entries daal, edit aur delete kar sakta hai, Dashboard aur Reports dekh sakta hai, aur Print/PDF nikal sakta hai. Opening Reconciliation, Business Settings aur Backup/Restore sirf Admin ke liye hain.</p>
+   <div class="formGrid">
+    <div class="field"><label>Naam</label><input id="usName"></div>
+    <div class="field"><label>Username</label><input id="usUser" autocomplete="off"></div>
+    <div class="field"><label>Password</label><input id="usPass" type="password" autocomplete="new-password"><small id="usPassHint" class="hint"></small></div>
+    <div class="field"><label>Role</label><select id="usRole"><option>Operator</option><option>Admin</option></select></div>
+   </div>
+   <div class="formActions"><button class="primary" id="usSaveBtn" onclick="saveUser()">Save User</button><button class="secondary" onclick="clearUserForm()">Clear</button></div>
+   <div id="usersTable"></div>
+  </div>
+  <div class="panel form section"><h2>Report Logo</h2><p class="hint">Logo upload karein, phir "Logo Position Set Karein" dabayein. Page preview mein report chun kar logo ko jahan chahein drag karein aur size adjust karein.</p>
+   <div class="logoRow"><div class="logoThumb" id="logoThumb">Koi logo nahi</div>
+   <div class="formActions" style="margin:0"><button class="secondary" onclick="document.getElementById('logoFile').click()">Logo Upload</button><input type="file" id="logoFile" accept="image/*" hidden onchange="uploadLogo(event)"><button class="primary" onclick="openLogoEditor()">Logo Position Set Karein</button><button class="secondary" onclick="removeLogo()">Logo Hatayein</button></div></div>
+  </div>
+  <div class="panel section"><h3>Calculation Rules</h3><div class="kpiLine"><span>Cash in Hand</span><b>Opening Cash + Investment + Cash Sales + Collections + Other Income − Cash Purchases − Expenses − Withdrawals − Supplier Payments</b></div><div class="kpiLine"><span>Net Profit</span><b>ERP Munafa − Discount + Other Income − Expenses</b></div><div class="kpiLine"><span>Market Receivable</span><b>Opening Receivable + Credit Sales + Other Dues − Collections</b></div><div class="kpiLine"><span>Payable</span><b>Opening Payable + Credit Purchases + Other Payables − Supplier Payments</b></div><div class="kpiLine"><span>Current Business Investment</span><b>Opening Capital + Added Investment + Profit − Withdrawals</b></div><div class="kpiLine"><span>Mojooda Investment (Circle mein)</span><b>Cash + Bank + Stock + Market Receivable − Payable</b></div><div class="kpiLine"><span>Opening Date</span><b>Opening date se pehle ki entries hisaab mein shamil nahi hoti</b></div></div>
  </section>
 </main>
 </div>
 <div class="toast" id="toast"></div>
+<img id="printLogo" alt="">
+<div class="authScreen" id="authScreen">
+ <div class="authBox panel">
+  <div class="logo"><div class="logoMark">BF</div><div><b>Business Finance OS</b><small>Cash • Investment • Profit</small></div></div>
+  <div id="authSetup">
+   <h2>Admin Account Banayein</h2><p class="hint">Pehli dafa ke liye Admin ka account banayein. Yahi account baad mein doosre users bana sakega.</p>
+   <div class="field"><label>Naam</label><input id="suName"></div>
+   <div class="field"><label>Username</label><input id="suUser" autocomplete="off"></div>
+   <div class="field"><label>Password</label><input id="suPass" type="password" autocomplete="new-password"></div>
+   <div class="field"><label>Password Dobara</label><input id="suPass2" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSetup()"></div>
+   <button class="primary authBtn" onclick="doSetup()">Account Banayein</button>
+  </div>
+  <div id="authLogin">
+   <h2>Login</h2>
+   <div class="field"><label>Username</label><input id="liUser" autocomplete="username" onkeydown="if(event.key==='Enter')$('liPass').focus()"></div>
+   <div class="field"><label>Password</label><input id="liPass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+   <button class="primary authBtn" onclick="doLogin()">Login</button>
+  </div>
+  <p class="authMsg" id="authMsg"></p>
+ </div>
+</div>
+<div class="modalBg" id="logoModal">
+ <div class="modal panel lgModal"><h2>Logo Page Preview</h2>
+  <div class="lgTools">
+   <div class="field"><label>Report</label><select id="lgReport" onchange="lgLoad()"><option value="dashboard">Dashboard</option><option value="reports">Financial Reports</option><option value="expReport">Expense Report</option><option value="other">Baaqi Pages (Sales, Cash Ledger waghera)</option></select></div>
+   <label class="chk" style="margin:0"><input type="checkbox" id="lgOn" onchange="lgUpdate()"> <span>Is report par logo lagayein</span></label>
+   <div class="field"><label>Logo Size: <span id="lgSizeTxt"></span></label><input type="range" id="lgSize" min="5" max="60" step="1" oninput="lgUpdate()"></div>
+  </div>
+  <p class="hint">Logo ko mouse se pakar kar (drag) page par jahan chahein rakhein. Size slider se chhota bara karein. Har report ki position alag save hoti hai.</p>
+  <div class="pagePrev" id="pagePrev"><div id="mockPage"></div><img id="lgImg" draggable="false" alt="Logo"></div>
+  <div class="formActions"><button class="primary" onclick="lgSave()">Save</button><button class="secondary" onclick="lgReset()">Reset Position</button><button class="secondary" onclick="closeLogoEditor()">Close</button></div>
+ </div>
+</div>
 <div class="modalBg" id="editModal" onclick="if(event.target===this)closeEdit()">
  <div class="modal panel form"><h2 id="editTitle">Edit Entry</h2><div class="formGrid" id="editFields"></div>
  <div class="formActions"><button class="primary" onclick="saveEdit()">Save Changes</button><button class="secondary" onclick="closeEdit()">Cancel</button></div></div>
@@ -333,6 +413,7 @@ function normalize(d){
  d.opening={...b.opening,...(d.opening||{})};
  ["cash","bank","stock","receivable","otherAssets","payable","otherLiabilities"].forEach(k=>d.opening[k]=Number(d.opening[k])||0);
  ARR.forEach(k=>{if(!Array.isArray(d[k]))d[k]=[]});
+ if(!Array.isArray(d.users))d.users=[];
  return d;
 }
 let db;try{db=normalize(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){db=normalize(null)}
@@ -401,23 +482,19 @@ function endStock(from,to){
  let e=latestStock(x=>x.date<=to&&(!lo||x.date>=lo));
  return e?{amount:Number(e.amount)||0,label:`As on ${fmtDate(e.date)}`}:null;
 }
+function hasErp(x){return x.erpProfit!==null&&x.erpProfit!==undefined&&x.erpProfit!==""}
 function profitFor(from,to){
- let inc=between(db.income,from,to);
- let sales=sum(inc.filter(isSale)),other=sum(inc.filter(isOther)),exp=sum(between(db.expenses,from,to)),pur=sum(between(db.purchases,from,to));
- let s=startStock(from),e=endStock(from,to);
- if(!e&&s&&!pur&&!sales)e={amount:s.amount,label:"No stock movement"};
- let cogs=(s&&e)?Math.max(0,s.amount+pur-e.amount):null;
- let profit=cogs===null?null:sales+other-cogs-exp;
- return{sales,other,exp,pur,start:s,end:e,cogs,profit,pct:(profit!==null&&sales)?profit/sales*100:0,missing:!s?"start":(!e?"end":"")};
+ let inc=between(db.income,from,to),sl=inc.filter(isSale);
+ let sales=sum(sl),other=sum(inc.filter(isOther)),exp=sum(between(db.expenses,from,to)),pur=sum(between(db.purchases,from,to));
+ let erp=sl.reduce((t,x)=>t+(Number(x.erpProfit)||0),0),disc=sl.reduce((t,x)=>t+(Number(x.discount)||0),0);
+ let missingErp=sl.filter(x=>!hasErp(x)).length;
+ let profit=erp-disc+other-exp;
+ return{sales,other,exp,pur,erp,disc,billProfit:erp-disc,profit,missingErp,pct:sales?profit/sales*100:0};
 }
-function profitNote(r){
- if(r.missing==="end")return "Closing stock enter karein (Purchases / Stock)";
- if(r.missing==="start")return "Period ke shuru ka stock nahi mila";
- return `Profit ${r.pct.toFixed(2)}% of sales`;
-}
+function profitNote(r){return `Profit ${r.pct.toFixed(2)}% of sales`+(r.missingErp?` | ${r.missingErp} sale bina ERP munafa`:"")}
 function currentInvestment(to){
  let cap=openingCapital();if(cap===null)return null;
- let p=profitFor(openDate(),to).profit;if(p===null)return null;
+ let p=profitFor(openDate(),to).profit;
  return cap+sum(upto(db.investments,to))+p-sum(upto(db.withdrawals,to));
 }
 // Mojooda investment = paisa jo is waqt business mein ghoom raha hai
@@ -436,6 +513,7 @@ function preOpeningCount(){return ARR.reduce((n,k)=>n+db[k].filter(x=>x.date&&!e
 
 // ---------- UI helpers ----------
 function go(page){
+ if(!isAdmin()&&ADMIN_PAGES.includes(page))page="dashboard";
  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(page).classList.add("active");
  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
  if(innerWidth<=900)closeSide();
@@ -478,6 +556,7 @@ function valid(id){let n=Number($(id).value);if(!(n>0)){toast("Enter a valid amo
 
 // ---------- Save actions ----------
 function saveReconciliation(){
+ if(!isAdmin())return;
  if(!$("reconDate").value){toast("Opening date select karein");return}
  db.opening={date:$("reconDate").value,cash:Number($("reconCash").value)||0,bank:Number($("reconBank").value)||0,stock:Number($("reconStock").value)||0,receivable:Number($("reconAR").value)||0,otherAssets:Number($("reconOtherAssets").value)||0,payable:Number($("reconAP").value)||0,otherLiabilities:Number($("reconOtherLiab").value)||0,note:$("reconNote").value,verified:true,cutoff:Number(db.opening.cutoff)||0};
  if($("reconCutoff").checked){db.opening.cutoff=Date.now();$("reconCutoff").checked=false}
@@ -485,7 +564,7 @@ function saveReconciliation(){
  save();renderAll();toast("Opening position saved and verified");
 }
 function saveInvestment(){let a=valid("invAmount");if(a==null)return;add("investments",{date:$("invDate").value,amount:a,source:$("invSource").value,note:$("invNote").value})}
-function saveIncome(){let a=valid("incAmount");if(a==null)return;let type=$("incType").value;add("income",{date:$("incDate").value,amount:a,type:type,mode:type==="Sale"?$("incMode").value:"",note:$("incNote").value})}
+function saveIncome(){let a=valid("incAmount");if(a==null)return;let type=$("incType").value;let ep=$("incErp").value,dc=$("incDisc").value;add("income",{date:$("incDate").value,amount:a,type:type,mode:type==="Sale"?$("incMode").value:"",erpProfit:type==="Sale"&&ep!==""?Number(ep):null,discount:type==="Sale"&&dc!==""?Number(dc):null,note:$("incNote").value});$("incErp").value="";$("incDisc").value=""}
 function saveCollection(){let a=valid("incAmount");if(a==null)return;add("income",{date:$("incDate").value,amount:a,type:"Cash Collection",mode:"",note:$("incNote").value})}
 function saveExpense(){let a=valid("expAmount");if(a==null)return;add("expenses",{date:$("expDate").value,amount:a,category:$("expCat").value,note:$("expNote").value})}
 function savePurchase(){let a=valid("purchaseAmount");if(a==null)return;add("purchases",{date:$("purchaseDate").value,amount:a,mode:$("purchaseMode").value,note:$("purchaseNote").value})}
@@ -529,22 +608,21 @@ function renderDashboard(){
  let inc=between(db.income,from,to),coll=sum(inc.filter(isColl)),cashSales=sum(inc.filter(isCashSale)),other=sum(inc.filter(isOther));
  let invP=sum(between(db.investments,from,to)),wdP=sum(between(db.withdrawals,from,to)),spP=sum(between(db.supplierPayments,from,to)),cashPurP=sum(between(db.purchases,from,to).filter(isCashPur));
  let cashStart=from?cashAsOf(prevDay(from)):db.opening.cash;
- let stockVal=r.end?r.end.amount:"Not entered",stockSub=r.end?r.end.label:"Is period ke liye enter nahi";
+ let stNow=stockAsOf(to),stockVal=stNow?stNow.amount:"Not entered",stockSub=stNow?stNow.label:"Closing stock enter karein";
  let wc=workingCapital(to);
  let h=setHeads(from,to);$("printBusiness").textContent=h.b;$("printPeriod").textContent=h.p;
  let notes=[];
  if(!db.opening.verified)notes.push("Opening Reconciliation abhi save nahi hui, is liye Business Investment \"Not Established\" dikhayega.");
- if(r.missing==="end")notes.push("Is period ka Closing Stock enter nahi hua, is liye Profit calculate nahi ho sakta. Purchases / Stock page par closing stock enter karein.");
- if(r.missing==="start")notes.push("Period ke shuru ka stock nahi mila. FROM date ko opening date par rakhein ya us se pehle ka closing stock enter karein.");
+ if(r.missingErp)notes.push(`${r.missingErp} sale entries mein ERP Munafa nahi likha, un ka munafa 0 gina gaya hai. Sales / Collections page par Edit kar ke ERP Munafa daal dein.`);
  let pre=preOpeningCount();if(pre)notes.push(`${pre} purani entries (opening se pehle ka record) hisaab mein shamil nahi. Tables mein yeh halki (faded) dikhti hain.`);
  $("dashNote").innerHTML=notes.length?`<div class="note">${notes.map(esc).join("<br>")}</div>`:"";
- $("dashCards").innerHTML=card("Mojooda Investment (Circle mein)",wc.total,wc.total===null?"Closing stock enter karein":"Cash + Bank + Stock + Lena − Dena","green","")+card("Cash In Hand",c,`As on ${fmtDate(to)}`,c<0?"red":"green","cash")+card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold","investment")+card("Total Sales",r.sales,"Selected period","blue","income")+card("Total Expenses",r.exp,"Selected period","red","expenses")+card("Stock Purchases",r.pur,"Selected period","gold","purchases")+card("Closing Stock",stockVal,stockSub,"gold","purchases")+card("Market Receivable",ar,"Customers owe","gold","receivable")+card("Payable",ap,"Amount to give","red","payable")+card("Net Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"),"reports");
+ $("dashCards").innerHTML=card("Cash In Hand",c,`As on ${fmtDate(to)}`,c<0?"red":"green","cash")+card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold","investment")+card("Total Sales",r.sales,"Selected period","blue","income")+card("Total Expenses",r.exp,"Selected period","red","expenses")+card("Stock Purchases",r.pur,"Selected period","gold","purchases")+card("Closing Stock",stockVal,stockSub,"gold","purchases")+card("Market Receivable",ar,"Customers owe","gold","receivable")+card("Payable",ap,"Amount to give","red","payable")+card("Net Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"),"reports");
  let pp=r.profit===null?"Not Established":`${money(r.profit)} (${r.pct.toFixed(2)}%)`;
- $("printSummary").innerHTML=`<div class="printSummaryTitle">Current Business Position</div><table class="printSummaryTable"><tbody><tr><td><b>Current Business Investment</b></td><td><b>${money(cur)}</b></td><td>Cash In Hand</td><td>${money(c)}</td></tr><tr><td><b>Mojooda Investment (Circle mein)</b></td><td><b>${money(wc.total)}</b></td><td>Stock (${wc.stock?esc(wc.stock.label):"Not entered"})</td><td>${wc.stock?money(wc.stock.amount):"Not entered"}</td></tr><tr><td>Market Credit (Lena Hai)</td><td>${money(ar)}</td><td>Payable / Udhaar (Dena Hai)</td><td>${money(ap)}</td></tr><tr><td>Closing Stock</td><td>${r.end?money(r.end.amount):"Not entered"}</td><td>Total Expenses</td><td>${money(r.exp)}</td></tr><tr><td>Total Sales</td><td>${money(r.sales)}</td><td>Total Purchase</td><td>${money(r.pur)}</td></tr><tr><td>Cash Recovery</td><td>${money(coll)}</td><td><b>Net Profit / Loss</b></td><td><b>${pp}</b></td></tr></tbody></table>`;
+ $("printSummary").innerHTML=`<div class="printSummaryTitle">Current Business Position</div><table class="printSummaryTable"><tbody><tr><td><b>Current Business Investment</b></td><td><b>${money(cur)}</b></td><td>Cash In Hand</td><td>${money(c)}</td></tr><tr><td><b>Mojooda Investment (Circle mein)</b></td><td><b>${money(wc.total)}</b></td><td>Stock (${wc.stock?esc(wc.stock.label):"Not entered"})</td><td>${wc.stock?money(wc.stock.amount):"Not entered"}</td></tr><tr><td>Market Credit (Lena Hai)</td><td>${money(ar)}</td><td>Payable / Udhaar (Dena Hai)</td><td>${money(ap)}</td></tr><tr><td>Closing Stock</td><td>${stNow?money(stNow.amount):"Not entered"}</td><td>Total Expenses</td><td>${money(r.exp)}</td></tr><tr><td>Total Sales</td><td>${money(r.sales)}</td><td>Total Purchase</td><td>${money(r.pur)}</td></tr><tr><td>Cash Recovery</td><td>${money(coll)}</td><td><b>Net Profit / Loss</b></td><td><b>${pp}</b></td></tr></tbody></table>`;
  let diff=(wc.total!==null&&cur!==null)?wc.total-(cur-db.opening.otherAssets+db.opening.otherLiabilities):null;
  $("wcPanel").innerHTML=`<div class="sectionTitle"><h2>Mojooda Investment: Is waqt business mein kitna paisa ghoom raha hai</h2><span class="pill">As on ${fmtDate(to)}</span></div><div class="kpiLine"><span>Cash In Hand</span><b>${money(wc.cash)}</b></div><div class="kpiLine"><span>Bank Balance (opening wala)</span><b>${money(wc.bank)}</b></div><div class="kpiLine"><span>Stock at Cost ${wc.stock?"("+esc(wc.stock.label)+")":""}</span><b>${wc.stock?money(wc.stock.amount):"Not entered"}</b></div><div class="kpiLine"><span>+ Market Credit (Lena Hai)</span><b>${money(wc.ar)}</b></div><div class="kpiLine"><span>− Payable (Dena Hai)</span><b class="red">${money(wc.ap)}</b></div><div class="kpiLine"><span><b>Mojooda Investment (Circle mein)</b></span><b class="${wc.total===null?"gold":(wc.total>=0?"green":"red")}">${money(wc.total)}</b></div>${(diff!==null&&Math.abs(diff)>=1)?`<div class="kpiLine noPrint"><span>Investment record se farq</span><b class="gold">${money(diff)}</b></div><p class="hint noPrint">Ye farq tab aata hai jab Market Receivable / Payables page par aisi raqam daali ho jo Sale ya Purchase nahi thi, ya koi entry miss ho.</p>`:""}`;
  $("cashBreakdown").innerHTML=`<div class="kpiLine"><span>Cash at Period Start</span><b>${money(cashStart)}</b></div><div class="kpiLine"><span>Investments Added</span><b>${money(invP)}</b></div><div class="kpiLine"><span>Collections + Cash Sales + Other Income</span><b>${money(coll+cashSales+other)}</b></div><div class="kpiLine"><span>Cash Purchases + Expenses + Withdrawals + Supplier Payments</span><b>${money(cashPurP+r.exp+wdP+spP)}</b></div><div class="kpiLine"><span>Cash In Hand</span><b>${money(c)}</b></div>`;
- $("profitBreakdown").innerHTML=`<div class="kpiLine"><span>Sales</span><b>${money(r.sales)}</b></div>${r.other?`<div class="kpiLine"><span>Other Income</span><b>${money(r.other)}</b></div>`:""}<div class="kpiLine"><span>Opening Stock</span><b>${r.start?money(r.start.amount):"Not found"}</b></div><div class="kpiLine"><span>Purchases</span><b>${money(r.pur)}</b></div><div class="kpiLine"><span>Closing Stock</span><b>${r.end?money(r.end.amount):"Not entered"}</b></div><div class="kpiLine"><span>Cost of Goods Sold</span><b>${money(r.cogs)}</b></div><div class="kpiLine"><span>Expenses</span><b>${money(r.exp)}</b></div><div class="kpiLine"><span>Net Profit / Loss</span><b class="${r.profit===null?"gold":(r.profit>=0?"green":"red")}">${money(r.profit)}</b></div>`;
+ $("profitBreakdown").innerHTML=`<div class="kpiLine"><span>Sales</span><b>${money(r.sales)}</b></div><div class="kpiLine"><span>ERP Munafa</span><b>${money(r.erp)}</b></div><div class="kpiLine"><span>− Discount</span><b>${money(r.disc)}</b></div>${r.other?`<div class="kpiLine"><span>+ Other Income</span><b>${money(r.other)}</b></div>`:""}<div class="kpiLine"><span>− Expenses</span><b>${money(r.exp)}</b></div><div class="kpiLine"><span>Net Profit / Loss</span><b class="${r.profit===null?"gold":(r.profit>=0?"green":"red")}">${money(r.profit)}</b></div>`;
  let rows=[...db.investments.map(x=>({...x,kind:"Investment",_t:"investments"})),...db.income.map(x=>({...x,kind:isSale(x)?(isCashSale(x)?"Cash Sale":"Credit Sale"):x.type,_t:"income"})),...db.purchases.map(x=>({...x,kind:"Purchase",_t:"purchases"})),...db.expenses.map(x=>({...x,kind:x.category,_t:"expenses"})),...db.withdrawals.map(x=>({...x,kind:"Withdrawal",_t:"withdrawals"})),...db.supplierPayments.map(x=>({...x,kind:"Supplier Payment",note:[x.party,x.note].filter(Boolean).join(" - "),_t:"supplierPayments"}))].sort((a,b)=>(b.date||"").localeCompare(a.date||"")).slice(0,12);
  $("recentTable").innerHTML=table(rows,[["date","Date"],["kind","Type"],["note","Detail"],["amount","Amount"]]);
 }
@@ -552,7 +630,7 @@ function renderInvestment(){$("invStats").innerHTML=card("Verified Capital",open
 function renderIncome(){
  let inc=allEff(db.income);
  $("incStats").innerHTML=card("Total Sales",sum(inc.filter(isSale)),"Cash + credit sales","blue")+card("Credit Sales",sum(inc.filter(isCreditSale)),"Market mein gayi","gold")+card("Cash Recovery",sum(inc.filter(isColl)),"Actual cash collected","green")+card("Entries",String(db.income.length),"Records","");
- $("incTable").innerHTML=table(db.income.slice().reverse().map(x=>({...x,pay:isSale(x)?(isCashSale(x)?"Cash":"Credit"):"-"})),[["date","Date"],["type","Type"],["pay","Payment"],["note","Detail"],["amount","Amount"]],"income");
+ $("incTable").innerHTML=table(db.income.slice().reverse().map(x=>({...x,pay:isSale(x)?(isCashSale(x)?"Cash":"Credit"):"-",erpTxt:isSale(x)?(hasErp(x)?money(x.erpProfit):"Nahi likha"):"-",discTxt:isSale(x)&&Number(x.discount)?money(x.discount):"-"})),[["date","Date"],["type","Type"],["pay","Payment"],["note","Detail"],["amount","Amount"],["erpTxt","ERP Munafa"],["discTxt","Discount"]],"income");
 }
 function renderPurchases(){
  let p=allEff(db.purchases),latest=latestStock(()=>true);
@@ -605,9 +683,9 @@ function renderCash(){
 function renderReports(){
  let {from,to}=getPeriod("repFrom","repTo"),r=profitFor(from,to),cur=currentInvestment(to);
  let h=setHeads(from,to);$("repBusiness").textContent=h.b;$("repPeriod").textContent=h.p;
- $("repStats").innerHTML=card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold")+card("Sales",r.sales,"Selected period","blue")+card("Cost of Goods Sold",r.cogs,"Opening stock + purchases - closing stock","gold")+card("Expenses",r.exp,"Selected period","red")+card("Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"))+card("Mojooda Investment (Circle mein)",workingCapital(to).total,"Cash + Bank + Stock + Lena − Dena","green")+card("Cash In Hand",cashAsOf(to),`As on ${fmtDate(to)}`,"green")+card("Receivable",arAsOf(to),"Lena hai","gold")+card("Payable",apAsOf(to),"Dena hai","red");
+ $("repStats").innerHTML=card("Current Business Investment",cur,"Capital + profit + added investment - withdrawals","gold")+card("Sales",r.sales,"Selected period","blue")+card("ERP Munafa − Discount",r.billProfit,`ERP ${money(r.erp)} − Discount ${money(r.disc)}`,"gold")+card("Expenses",r.exp,"Selected period","red")+card("Profit / Loss",r.profit,profitNote(r),r.profit===null?"gold":(r.profit>=0?"green":"red"))+card("Mojooda Investment (Circle mein)",workingCapital(to).total,"Cash + Bank + Stock + Lena − Dena","green")+card("Cash In Hand",cashAsOf(to),`As on ${fmtDate(to)}`,"green")+card("Receivable",arAsOf(to),"Lena hai","gold")+card("Payable",apAsOf(to),"Dena hai","red");
  const L=(a,b,c)=>`<div class="kpiLine"><span>${a}</span><b class="${c||""}">${b}</b></div>`;
- $("monthlyReport").innerHTML="<h2>Profit &amp; Loss</h2>"+L("Sales",money(r.sales))+(r.other?L("Other Income",money(r.other)):"")+L("Opening Stock",r.start?money(r.start.amount):"Not found")+L("Purchases",money(r.pur))+L("Closing Stock",r.end?`${money(r.end.amount)} (${esc(r.end.label)})`:"Not entered")+L("Cost of Goods Sold",money(r.cogs))+L("Expenses",money(r.exp))+L("Net Profit / Loss",money(r.profit),r.profit===null?"gold":(r.profit>=0?"green":"red"));
+ $("monthlyReport").innerHTML="<h2>Profit &amp; Loss</h2>"+L("Sales",money(r.sales))+L("ERP Munafa",money(r.erp))+L("− Discount",money(r.disc))+(r.other?L("+ Other Income",money(r.other)):"")+L("− Expenses",money(r.exp))+L("Net Profit / Loss",money(r.profit),r.profit===null?"gold":(r.profit>=0?"green":"red"));
  let cats={};between(db.expenses,from,to).forEach(x=>cats[x.category]=(cats[x.category]||0)+Number(x.amount||0));
  let catHtml=Object.keys(cats).sort((a,b)=>cats[b]-cats[a]).map(k=>L(esc(k),money(cats[k]))).join("")||'<div class="empty">No expenses in this period.</div>';
  $("categoryReport").innerHTML="<h2>Expenses by Category</h2>"+catHtml;
@@ -618,18 +696,18 @@ function renderReports(){
  let keys=Object.keys(months).sort();
  $("yearlyReport").innerHTML="<h2>Month-wise Summary</h2>"+(keys.length?`<div style="overflow:auto"><table><thead><tr><th>Month</th><th class="num">Sales</th><th class="num">Collections</th><th class="num">Purchases</th><th class="num">Expenses</th></tr></thead><tbody>${keys.map(k=>{let m=months[k];return `<tr><td>${k.slice(5)}-${k.slice(0,4)}</td><td class="num">${money(m.sales)}</td><td class="num">${money(m.coll)}</td><td class="num">${money(m.pur)}</td><td class="num">${money(m.exp)}</td></tr>`}).join("")}</tbody></table></div>`:'<div class="empty">No records in this period.</div>');
 }
-function renderSettings(){$("setBusiness").value=db.settings.business;$("setCurrency").value=db.settings.currency;$("setOwner").value=db.settings.owner;$("setContact").value=db.settings.contact}
-function saveSettings(){db.settings={business:$("setBusiness").value||"My Business",currency:$("setCurrency").value||"Rs.",owner:$("setOwner").value,contact:$("setContact").value};save();$("brandName").textContent=db.settings.business;renderAll();toast("Settings saved")}
-function clearAllData(){
+function renderSettings(){$("setBusiness").value=db.settings.business;$("setCurrency").value=db.settings.currency;$("setOwner").value=db.settings.owner;$("setContact").value=db.settings.contact;renderLogoThumb();renderUsers()}
+function saveSettings(){if(!isAdmin())return;db.settings={...db.settings,business:$("setBusiness").value||"My Business",currency:$("setCurrency").value||"Rs.",owner:$("setOwner").value,contact:$("setContact").value};save();$("brandName").textContent=db.settings.business;renderAll();toast("Settings saved")}
+function clearAllData(){if(!isAdmin())return;
  if(!confirm("Saara data delete ho jayega. Pehle Backup le lein. Continue?"))return;
  if(!confirm("Pakka? Ye wapas nahi aayega."))return;
- db=blankDb();save();location.reload();
+ let keep=db.users;db=blankDb();db.users=keep;save();location.reload();
 }
 function renderAll(){renderExpReport();renderDashboard();renderReconcile();renderInvestment();renderIncome();renderPurchases();renderExpenses();renderWithdrawals();renderRec();renderPay();renderCash();renderReports();renderSettings()}
 function doPrint(title){
  toast("PDF ke liye print window mein Destination: \"Save as PDF\" chunein");
  let old=document.title;document.title=title;
- setTimeout(()=>{window.print();document.title=old;document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))},80);
+ setTimeout(()=>{applyPrintLogo();window.print();document.title=old;document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))},80);
 }
 function printPage(){
  let p=document.querySelector(".page.active").id,name=$("pageTitle").textContent;
@@ -679,7 +757,7 @@ const EXP_CATS=["Rent","Salary","Transport","Utilities","Food","Repair","Marketi
 const F_DATE=["date","Date","date"],F_AMT=["amount","Amount (Rs.)","number"],F_NOTE=["note","Note / Detail","textarea"];
 const FIELDS={
  investments:[F_DATE,F_AMT,["source","Source / Investor","text"],F_NOTE],
- income:[F_DATE,F_AMT,["type","Type","select",["Sale","Cash Collection","Other Income"]],["mode","Sale Payment (sirf Sale ke liye)","select",["Credit (Udhaar)","Cash Received"]],F_NOTE],
+ income:[F_DATE,F_AMT,["type","Type","select",["Sale","Cash Collection","Other Income"]],["mode","Sale Payment (sirf Sale ke liye)","select",["Credit (Udhaar)","Cash Received"]],["erpProfit","ERP Munafa (sirf Sale)","optnum"],["discount","Discount (sirf Sale)","optnum"],F_NOTE],
  purchases:[F_DATE,F_AMT,["mode","Payment","select",["Cash Paid","Credit / Payable"]],F_NOTE],
  closingStock:[F_DATE,F_AMT,F_NOTE],
  expenses:[F_DATE,F_AMT,["category","Category","select",EXP_CATS],F_NOTE],
@@ -699,6 +777,7 @@ function openEdit(type,id){
   let v=rec[k]??"";
   if(kind==="select"){let o=opts.slice();if(k==="mode"&&type==="income"&&!v)v="Credit (Udhaar)";if(v&&!o.includes(v))o.push(v);return `<div class="field"><label>${label}</label><select id="ef_${k}">${o.map(x=>`<option ${x===v?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`}
   if(kind==="textarea")return `<div class="field wide"><label>${label}</label><textarea id="ef_${k}">${esc(v)}</textarea></div>`;
+  if(kind==="optnum")return `<div class="field"><label>${label}</label><input id="ef_${k}" type="number" step=".01" value="${v===null?"":esc(v)}"></div>`;
   return `<div class="field"><label>${label}</label><input id="ef_${k}" type="${kind}" ${kind==="number"?'min="0" step=".01"':""} value="${esc(v)}"></div>`;
  }).join("");
  $("editModal").style.display="flex";
@@ -706,10 +785,10 @@ function openEdit(type,id){
 function closeEdit(){$("editModal").style.display="none";editing=null}
 function saveEdit(){
  if(!editing)return;let {type,id}=editing,rec=db[type].find(x=>x.id===id);if(!rec)return closeEdit();
- let upd={};FIELDS[type].forEach(([k,,kind])=>{let v=$("ef_"+k).value;upd[k]=kind==="number"?Number(v):v});
+ let upd={};FIELDS[type].forEach(([k,,kind])=>{let v=$("ef_"+k).value;upd[k]=kind==="number"?Number(v):kind==="optnum"?(v===""?null:Number(v)):v});
  if(!upd.date){toast("Date select karein");return}
  if(!(upd.amount>0)){toast("Enter a valid amount");return}
- if(type==="income"&&upd.type!=="Sale")upd.mode="";
+ if(type==="income"&&upd.type!=="Sale"){upd.mode="";upd.erpProfit=null;upd.discount=null}
  Object.assign(rec,upd);
  // keep linked collection / payment amounts in step
  if(type==="receivables"&&rec.linkId){let c=db.income.find(x=>x.id===rec.linkId);if(c)c.amount=rec.amount}
@@ -718,12 +797,186 @@ function saveEdit(){
  if(type==="supplierPayments"&&rec.payableId){let c=db.payables.find(x=>x.id===rec.payableId);if(c)c.amount=rec.amount}
  save();closeEdit();renderAll();toast("Entry updated");
 }
-function exportData(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download=`Business_Finance_Backup_${today}.json`;a.click()}
-function restoreData(e){
+function exportData(){if(!isAdmin())return;let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:"application/json"}));a.download=`Business_Finance_Backup_${today}.json`;a.click()}
+function restoreData(e){if(!isAdmin())return;
  let f=e.target.files[0];if(!f)return;let r=new FileReader();
- r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||typeof d!=="object"||!(d.settings||d.opening||d.income))throw 0;db=normalize(d);save();location.reload()}catch(err){toast("Invalid backup file")}};
+ r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||typeof d!=="object"||!(d.settings||d.opening||d.income))throw 0;if(!Array.isArray(d.users)||!d.users.length)d.users=db.users;db=normalize(d);save();location.reload()}catch(err){toast("Invalid backup file")}};
  r.readAsText(f);e.target.value="";
 }
+
+// ---------- Report logo ----------
+const LOGO_KEYS=["dashboard","reports","expReport","other"];
+function defLogoPos(){return{on:true,x:86,y:0,w:14}}
+function logoPos(k){let p=(db.settings.logoPos||{})[k];return p?{...defLogoPos(),...p}:defLogoPos()}
+function renderLogoThumb(){
+ let t=$("logoThumb");if(!t)return;
+ t.innerHTML=db.settings.logo?`<img src="${db.settings.logo}" alt="Logo">`:"Koi logo nahi";
+}
+function uploadLogo(e){
+ let f=e.target.files[0];e.target.value="";if(!f)return;
+ if(!f.type.startsWith("image/")){toast("Sirf image file chunein");return}
+ let rd=new FileReader();
+ rd.onload=()=>{let im=new Image();
+  im.onload=()=>{
+   let max=600,sc=Math.min(1,max/Math.max(im.width||max,im.height||max));
+   let c=document.createElement("canvas");c.width=Math.max(1,Math.round((im.width||max)*sc));c.height=Math.max(1,Math.round((im.height||max)*sc));
+   c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+   db.settings.logo=c.toDataURL("image/png");
+   try{save()}catch(err){delete db.settings.logo;toast("Logo bohat bara hai, chhoti image chunein");return}
+   renderLogoThumb();toast("Logo upload ho gaya, ab position set karein");openLogoEditor();
+  };
+  im.onerror=()=>toast("Image nahi khul saki");im.src=rd.result};
+ rd.readAsDataURL(f);
+}
+function removeLogo(){if(!isAdmin())return;if(!db.settings.logo)return;if(!confirm("Logo hata dein?"))return;delete db.settings.logo;save();renderLogoThumb();toast("Logo hata diya")}
+
+// page preview editor
+let lgState=null;
+function mockHtml(k){
+ let biz=esc(db.settings.business||"Business"),box='<div style="height:8px;width:55%;background:#d9e1e8;border-radius:3px;margin-bottom:9px"></div><div style="height:15px;width:75%;background:#c3ced8;border-radius:3px;margin-bottom:8px"></div><div style="height:6px;width:45%;background:#e3e9ee;border-radius:3px"></div>';
+ if(k==="dashboard"){
+  let cards=Array.from({length:9},()=>`<div style="border:1px solid #d6dee6;border-left:5px solid #9fb3c4;border-radius:9px;background:#f7fafc;padding:13px 14px 12px 15px;height:72px;box-sizing:border-box">${box}</div>`).join("");
+  return `<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #0f8f74;padding-bottom:9px;margin:2px 0 16px"><div><div style="font:800 23px Arial;color:#10243a">${biz}</div><div style="font:700 9.5px Arial;letter-spacing:2.5px;color:#0f8f74;margin-top:4px">BUSINESS DASHBOARD</div></div><div style="font:9.5px Arial;color:#5b6b7a">Period: 01-10-2026 to 06-10-2026 | Printed: 06-10-2026</div></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">${cards}</div>`;
+ }
+ let title={reports:"Financial Reports",expReport:"Expense Report - Month",other:"Report Page"}[k];
+ let cards=k==="expReport"?"":`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px">${Array.from({length:k==="reports"?8:4},()=>`<div style="border:1px solid #bbb;border-radius:12px;padding:12px;height:78px;box-sizing:border-box">${box}</div>`).join("")}</div>`;
+ let rows=Array.from({length:k==="expReport"?14:9},()=>'<div style="height:22px;border-bottom:1px solid #e3e9ee;display:flex;gap:20px;align-items:center"><div style="height:6px;width:18%;background:#e3e9ee"></div><div style="height:6px;width:40%;background:#e3e9ee"></div><div style="height:6px;width:15%;background:#d9e1e8;margin-left:auto"></div></div>').join("");
+ return `<div style="text-align:center;margin-bottom:10px"><div style="font:700 20px Arial;color:#111">${biz}</div><div style="font:700 14px Arial;color:#111;margin:3px 0">${title}</div><div style="font:10px Arial;color:#555">Printed: 06-10-2026</div></div>${cards}<div style="border:1px solid #bbb;border-radius:12px;padding:16px">${rows}</div>`;
+}
+function openLogoEditor(){
+ if(!db.settings.logo){toast("Pehle logo upload karein");return}
+ lgState={};LOGO_KEYS.forEach(k=>lgState[k]=logoPos(k));
+ $("lgImg").src=db.settings.logo;$("logoModal").style.display="flex";
+ lgLoad();
+}
+function closeLogoEditor(){$("logoModal").style.display="none";lgState=null}
+function lgScale(){let p=$("pagePrev"),m=$("mockPage");m.style.transform=`scale(${p.clientWidth/726})`}
+function lgLoad(){
+ let k=$("lgReport").value,p=lgState[k];
+ $("mockPage").innerHTML=mockHtml(k);lgScale();
+ $("lgOn").checked=p.on;$("lgSize").value=p.w;lgPlace();
+}
+function lgPlace(){
+ let k=$("lgReport").value,p=lgState[k],img=$("lgImg");
+ $("lgSizeTxt").textContent=p.w+"%";
+ img.style.width=p.w+"%";img.style.left=p.x+"%";img.style.top=p.y+"%";img.style.opacity=p.on?1:.3;
+}
+function lgUpdate(){
+ let k=$("lgReport").value,p=lgState[k];
+ p.on=$("lgOn").checked;p.w=Number($("lgSize").value);
+ lgClamp(p);lgPlace();
+}
+function lgClamp(p){
+ let pv=$("pagePrev"),img=$("lgImg");
+ let hPct=pv.clientHeight?img.offsetHeight/pv.clientHeight*100:0;
+ p.x=Math.min(Math.max(0,p.x),100-p.w);p.y=Math.min(Math.max(0,p.y),Math.max(0,100-hPct));
+ p.x=Math.round(p.x*10)/10;p.y=Math.round(p.y*10)/10;
+}
+function lgReset(){let k=$("lgReport").value;lgState[k]=defLogoPos();lgLoad()}
+function lgSave(){if(!isAdmin())return;db.settings.logoPos=lgState;save();closeLogoEditor();toast("Logo ki position save ho gayi")}
+(function(){
+ let img=$("lgImg"),drag=null;
+ img.addEventListener("pointerdown",e=>{e.preventDefault();let r=img.getBoundingClientRect();drag={dx:e.clientX-r.left,dy:e.clientY-r.top};img.setPointerCapture(e.pointerId)});
+ img.addEventListener("pointermove",e=>{
+  if(!drag||!lgState)return;let pv=$("pagePrev").getBoundingClientRect(),p=lgState[$("lgReport").value];
+  p.x=(e.clientX-pv.left-drag.dx)/pv.width*100;p.y=(e.clientY-pv.top-drag.dy)/pv.height*100;
+  if(!p.on){p.on=true;$("lgOn").checked=true}
+  lgClamp(p);lgPlace();
+ });
+ const end=()=>drag=null;img.addEventListener("pointerup",end);img.addEventListener("pointercancel",end);
+ window.addEventListener("resize",()=>{if(lgState)lgScale()});
+})();
+// put the logo on the page being printed
+function applyPrintLogo(){
+ let el=$("printLogo");el.classList.remove("show");
+ if(!db.settings.logo)return;
+ let pg=document.body.dataset.page,k=document.body.classList.contains("printOnly")?"expReport":(pg==="dashboard"?"dashboard":pg==="reports"?"reports":"other");
+ let p=logoPos(k);if(!p.on)return;
+ el.src=db.settings.logo;el.style.left=p.x+"%";el.style.top=p.y+"%";el.style.width=p.w+"%";el.classList.add("show");
+}
+window.addEventListener("beforeprint",applyPrintLogo);
+
+
+// ---------- Users & roles (Admin / Operator) ----------
+const SESSION_KEY="bfos_session";
+const ADMIN_PAGES=["reconcile","settings"];
+let currentUser=null,editingUserId=null;
+async function hashPw(pw,salt){
+ let txt=salt+"|"+pw;
+ try{let buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(txt));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("")}
+ catch(e){let h=2166136261;for(let i=0;i<txt.length;i++){h^=txt.charCodeAt(i);h=Math.imul(h,16777619)}return "f"+(h>>>0).toString(16)}
+}
+function isAdmin(){return !!currentUser&&currentUser.role==="Admin"}
+function findUser(username){let u=String(username||"").trim().toLowerCase();return db.users.find(x=>x.username.toLowerCase()===u)}
+function showAuth(){
+ let setup=!db.users.length;
+ $("authSetup").style.display=setup?"":"none";$("authLogin").style.display=setup?"none":"";
+ $("authMsg").textContent="";$("authScreen").style.display="flex";
+ setTimeout(()=>$(setup?"suName":"liUser").focus(),50);
+}
+async function doSetup(){
+ let name=$("suName").value.trim(),user=$("suUser").value.trim(),p1=$("suPass").value,p2=$("suPass2").value;
+ if(!name||!user){$("authMsg").textContent="Naam aur username likhein";return}
+ if(p1.length<4){$("authMsg").textContent="Password kam az kam 4 characters ka ho";return}
+ if(p1!==p2){$("authMsg").textContent="Dono passwords ek jaise nahi";return}
+ let u={id:uid(),name,username:user,role:"Admin",salt:uid()};u.pass=await hashPw(p1,u.salt);
+ db.users.push(u);save();startSession(u);
+}
+async function doLogin(){
+ let u=findUser($("liUser").value),p=$("liPass").value;
+ if(!u||u.pass!==await hashPw(p,u.salt)){$("authMsg").textContent="Username ya password ghalat hai";return}
+ $("liPass").value="";startSession(u);
+}
+function startSession(u){currentUser=u;sessionStorage.setItem(SESSION_KEY,u.id);$("authScreen").style.display="none";applyRole()}
+function logout(){sessionStorage.removeItem(SESSION_KEY);currentUser=null;location.reload()}
+function applyRole(){
+ document.body.classList.toggle("roleOperator",!isAdmin());
+ $("userBadge").textContent=currentUser?`${currentUser.name} (${currentUser.role})`:"";
+ let act=document.querySelector(".page.active");
+ if(!isAdmin()&&act&&ADMIN_PAGES.includes(act.id))go("dashboard");
+ renderUsers();
+}
+function renderUsers(){
+ if(!$("usersTable"))return;
+ $("usersTable").innerHTML=db.users.length?`<div style="overflow:auto"><table><thead><tr><th>Naam</th><th>Username</th><th>Role</th><th class="act">Action</th></tr></thead><tbody>${db.users.map(u=>`<tr><td>${esc(u.name)}${currentUser&&u.id===currentUser.id?" (aap)":""}</td><td>${esc(u.username)}</td><td>${esc(u.role)}</td><td class="act"><div class="rowBtns"><button class="secondary" onclick="editUser('${u.id}')">Edit</button><button class="secondary" onclick="deleteUser('${u.id}')">Delete</button></div></td></tr>`).join("")}</tbody></table></div>`:'<div class="empty">Koi user nahi.</div>';
+}
+function clearUserForm(){editingUserId=null;["usName","usUser","usPass"].forEach(id=>$(id).value="");$("usRole").value="Operator";$("usSaveBtn").textContent="Save User";$("usPassHint").textContent=""}
+function editUser(id){
+ let u=db.users.find(x=>x.id===id);if(!u)return;editingUserId=id;
+ $("usName").value=u.name;$("usUser").value=u.username;$("usPass").value="";$("usRole").value=u.role;
+ $("usSaveBtn").textContent="Update User";$("usPassHint").textContent="Password khaali chhorein to purana hi rahega.";
+ $("usName").scrollIntoView({block:"center"});
+}
+async function saveUser(){
+ if(!isAdmin())return;
+ let name=$("usName").value.trim(),user=$("usUser").value.trim(),pw=$("usPass").value,role=$("usRole").value;
+ if(!name||!user){toast("Naam aur username likhein");return}
+ let same=findUser(user);if(same&&same.id!==editingUserId){toast("Yeh username pehle se mojood hai");return}
+ if(editingUserId){
+  let u=db.users.find(x=>x.id===editingUserId);if(!u)return clearUserForm();
+  let admins=db.users.filter(x=>x.role==="Admin");
+  if(u.role==="Admin"&&role!=="Admin"&&admins.length===1){toast("Kam az kam ek Admin hona zaroori hai");return}
+  if(pw&&pw.length<4){toast("Password kam az kam 4 characters ka ho");return}
+  u.name=name;u.username=user;u.role=role;if(pw){u.salt=uid();u.pass=await hashPw(pw,u.salt)}
+  if(currentUser&&u.id===currentUser.id)currentUser=u;
+ }else{
+  if(pw.length<4){toast("Password kam az kam 4 characters ka ho");return}
+  let u={id:uid(),name,username:user,role,salt:uid()};u.pass=await hashPw(pw,u.salt);db.users.push(u);
+ }
+ save();clearUserForm();applyRole();toast("User save ho gaya");
+}
+function deleteUser(id){
+ let u=db.users.find(x=>x.id===id);if(!u)return;
+ if(currentUser&&u.id===currentUser.id){toast("Aap apna khud ka user delete nahi kar sakte");return}
+ if(u.role==="Admin"&&db.users.filter(x=>x.role==="Admin").length===1){toast("Kam az kam ek Admin hona zaroori hai");return}
+ if(!confirm(`User "${u.name}" delete kar dein?`))return;
+ db.users=db.users.filter(x=>x.id!==id);save();renderUsers();toast("User delete ho gaya");
+}
+function initAuth(){
+ let sid=sessionStorage.getItem(SESSION_KEY),u=sid&&db.users.find(x=>x.id===sid);
+ if(u){currentUser=u;applyRole()}else showAuth();
+}
+
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.page));
 $("todayText").textContent=new Date().toLocaleDateString("en-PK",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 ["invDate","incDate","expDate","recDate","payDate","spDate","purchaseDate","closingStockDate","withdrawDate","reconDate"].forEach(id=>{if($(id))$(id).value=today});
@@ -733,5 +986,6 @@ $("expRepMonth").value=today.slice(0,7);$("expRepYear").value=today.slice(0,4);
 document.body.dataset.page="dashboard";
 $("brandName").textContent=db.settings.business||"Business Finance OS";
 renderAll();
+initAuth();
 
 </script>
