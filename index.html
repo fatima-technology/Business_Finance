@@ -254,6 +254,7 @@ body.roleOperator .adminOnly{display:none!important}
    <div class="field"><label>Sale Payment (sirf Sale ke liye)</label><select id="incMode"><option>Credit (Udhaar)</option><option>Cash Received</option></select></div>
    <div class="field"><label>ERP Munafa (sirf Sale ke liye)</label><input type="number" id="incErp" step=".01" placeholder="ERP mein jo munafa aa raha hai"></div>
    <div class="field"><label>Discount (sirf Sale ke liye)</label><input type="number" id="incDisc" min="0" step=".01" placeholder="Bill par diya gaya discount"></div>
+   <div class="field"><label>Sale Return (sirf Sale ke liye)</label><input type="number" id="incRet" min="0" step=".01" placeholder="Wapas aaya maal (Amount se minus hoga)"></div>
    <div class="field wide"><label>Customer / Detail</label><textarea id="incNote" placeholder="Customer, invoice or income detail..."></textarea></div>
   </div><div class="formActions"><button class="primary" onclick="saveIncome()">Save Income</button></div><div class="formActions"><button class="secondary" onclick="saveCollection()">Record Market Collection</button></div></div>
   <div class="grid section" id="incStats"></div><div class="panel section" id="incTable"></div>
@@ -601,7 +602,7 @@ function saveReconciliation(){
  save();renderAll();toast("Opening position saved and verified");
 }
 function saveInvestment(){let a=valid("invAmount");if(a==null)return;add("investments",{date:$("invDate").value,amount:a,source:$("invSource").value,note:$("invNote").value})}
-function saveIncome(){let a=valid("incAmount");if(a==null)return;let type=$("incType").value;let ep=$("incErp").value,dc=$("incDisc").value;add("income",{date:$("incDate").value,amount:a,type:type,mode:type==="Sale"?$("incMode").value:"",erpProfit:type==="Sale"&&ep!==""?Number(ep):null,discount:type==="Sale"&&dc!==""?Number(dc):null,note:$("incNote").value});$("incErp").value="";$("incDisc").value=""}
+function saveIncome(){let a=valid("incAmount");if(a==null)return;let type=$("incType").value;let ep=$("incErp").value,dc=$("incDisc").value,rt=type==="Sale"?Number($("incRet").value)||0:0;if(rt<0||rt>=a){toast("Sale Return, Sale Amount se kam honi chahiye");return}add("income",{date:$("incDate").value,amount:a-rt,type:type,mode:type==="Sale"?$("incMode").value:"",erpProfit:type==="Sale"&&ep!==""?Number(ep):null,discount:type==="Sale"&&dc!==""?Number(dc):null,saleReturn:rt?rt:null,note:$("incNote").value});$("incErp").value="";$("incDisc").value="";$("incRet").value=""}
 function saveCollection(){let a=valid("incAmount");if(a==null)return;add("income",{date:$("incDate").value,amount:a,type:"Cash Collection",mode:"",note:$("incNote").value})}
 function saveExpense(){let a=valid("expAmount");if(a==null)return;add("expenses",{date:$("expDate").value,amount:a,category:$("expCat").value,note:$("expNote").value})}
 function savePurchase(){let a=valid("purchaseAmount");if(a==null)return;add("purchases",{date:$("purchaseDate").value,amount:a,mode:$("purchaseMode").value,note:$("purchaseNote").value})}
@@ -667,7 +668,7 @@ function renderInvestment(){$("invStats").innerHTML=card("Verified Capital",open
 function renderIncome(){
  let inc=allEff(db.income);
  $("incStats").innerHTML=card("Total Sales",sum(inc.filter(isSale)),"Cash + credit sales","blue")+card("Credit Sales",sum(inc.filter(isCreditSale)),"Market mein gayi","gold")+card("Cash Recovery",sum(inc.filter(isColl)),"Actual cash collected","green")+card("Entries",String(db.income.length),"Records","");
- $("incTable").innerHTML=table(db.income.slice().reverse().map(x=>({...x,pay:isSale(x)?(isCashSale(x)?"Cash":"Credit"):"-",erpTxt:isSale(x)?(hasErp(x)?money(x.erpProfit):"Nahi likha"):"-",discTxt:isSale(x)&&Number(x.discount)?money(x.discount):"-"})),[["date","Date"],["type","Type"],["pay","Payment"],["note","Detail"],["amount","Amount"],["erpTxt","ERP Munafa"],["discTxt","Discount"]],"income");
+ $("incTable").innerHTML=table(db.income.slice().reverse().map(x=>({...x,pay:isSale(x)?(isCashSale(x)?"Cash":"Credit"):"-",erpTxt:isSale(x)?(hasErp(x)?money(x.erpProfit):"Nahi likha"):"-",discTxt:isSale(x)&&Number(x.discount)?money(x.discount):"-",saleTxt:money(Number(x.amount)+(Number(x.saleReturn)||0)),retTxt:isSale(x)&&Number(x.saleReturn)?money(x.saleReturn):"-"})),[["date","Date"],["type","Type"],["pay","Payment"],["note","Detail"],["saleTxt","Sale Amount"],["retTxt","Sale Return"],["amount","Net Amount"],["erpTxt","ERP Munafa"],["discTxt","Discount"]],"income");
 }
 function renderPurchases(){
  let p=allEff(db.purchases),latest=latestStock(()=>true);
@@ -794,7 +795,7 @@ const EXP_CATS=["Rent","Salary","Transport","Utilities","Food","Repair","Marketi
 const F_DATE=["date","Date","date"],F_AMT=["amount","Amount (Rs.)","number"],F_NOTE=["note","Note / Detail","textarea"];
 const FIELDS={
  investments:[F_DATE,F_AMT,["source","Source / Investor","text"],F_NOTE],
- income:[F_DATE,F_AMT,["type","Type","select",["Sale","Cash Collection","Other Income"]],["mode","Sale Payment (sirf Sale ke liye)","select",["Credit (Udhaar)","Cash Received"]],["erpProfit","ERP Munafa (sirf Sale)","optnum"],["discount","Discount (sirf Sale)","optnum"],F_NOTE],
+ income:[F_DATE,F_AMT,["type","Type","select",["Sale","Cash Collection","Other Income"]],["mode","Sale Payment (sirf Sale ke liye)","select",["Credit (Udhaar)","Cash Received"]],["erpProfit","ERP Munafa (sirf Sale)","optnum"],["discount","Discount (sirf Sale)","optnum"],["saleReturn","Sale Return (sirf Sale)","optnum"],F_NOTE],
  purchases:[F_DATE,F_AMT,["mode","Payment","select",["Cash Paid","Credit / Payable"]],F_NOTE],
  closingStock:[F_DATE,F_AMT,F_NOTE],
  expenses:[F_DATE,F_AMT,["category","Category","select",EXP_CATS],F_NOTE],
@@ -812,6 +813,7 @@ function openEdit(type,id){
  $("editTitle").textContent=`Edit ${EDIT_NAMES[type]||"Entry"}`;
  $("editFields").innerHTML=f.map(([k,label,kind,opts])=>{
   let v=rec[k]??"";
+  if(type==="income"&&k==="amount"&&Number(rec.saleReturn))v=Number(rec.amount)+Number(rec.saleReturn);
   if(kind==="select"){let o=opts.slice();if(k==="mode"&&type==="income"&&!v)v="Credit (Udhaar)";if(v&&!o.includes(v))o.push(v);return `<div class="field"><label>${label}</label><select id="ef_${k}">${o.map(x=>`<option ${x===v?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`}
   if(kind==="textarea")return `<div class="field wide"><label>${label}</label><textarea id="ef_${k}">${esc(v)}</textarea></div>`;
   if(kind==="optnum")return `<div class="field"><label>${label}</label><input id="ef_${k}" type="number" step=".01" value="${v===null?"":esc(v)}"></div>`;
@@ -825,7 +827,8 @@ function saveEdit(){
  let upd={};FIELDS[type].forEach(([k,,kind])=>{let v=$("ef_"+k).value;upd[k]=kind==="number"?Number(v):kind==="optnum"?(v===""?null:Number(v)):v});
  if(!upd.date){toast("Date select karein");return}
  if(!(upd.amount>0)){toast("Enter a valid amount");return}
- if(type==="income"&&upd.type!=="Sale"){upd.mode="";upd.erpProfit=null;upd.discount=null}
+ if(type==="income"&&upd.type!=="Sale"){upd.mode="";upd.erpProfit=null;upd.discount=null;upd.saleReturn=null}
+ if(type==="income"&&upd.type==="Sale"){let rt=Number(upd.saleReturn)||0;if(rt<0||rt>=upd.amount){toast("Sale Return, Sale Amount se kam honi chahiye");return}upd.amount=upd.amount-rt;upd.saleReturn=rt?rt:null}
  Object.assign(rec,upd);
  // keep linked collection / payment amounts in step
  if(type==="receivables"&&rec.linkId){let c=db.income.find(x=>x.id===rec.linkId);if(c)c.amount=rec.amount}
