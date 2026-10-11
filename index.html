@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Business Finance OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#07111f;--panel:#0d1b2d;--panel2:#10243a;--line:#203650;--text:#eaf2fb;--muted:#8ea5bc;--accent:#26d6a1;--blue:#4da3ff;--gold:#ffc857;--red:#ff647c;--shadow:0 18px 45px #0007}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#06101c,#0b1727 45%,#081421);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
@@ -68,7 +71,7 @@ body.roleOperator .adminOnly{display:none!important}
  .page{display:none!important}
  .page.active{display:block!important}
  .authScreen,.userBadge{display:none!important}
- #printLogo.show{display:block!important;position:fixed;z-index:50;height:auto}
+ #printLogo.show{display:block!important;position:fixed;z-index:9999;height:auto;opacity:1!important;visibility:visible!important}
  .act,.modalBg,.toast{display:none!important}
  .printHead{display:block!important;text-align:center;margin:0 0 10px}
  .printHead h1{margin:0;font-size:20px;color:#111}.printHead h2{margin:3px 0;font-size:14px;color:#111}.printHead p{margin:2px;font-size:10px;color:#555}
@@ -165,9 +168,280 @@ body.roleOperator .adminOnly{display:none!important}
 .welMsg.err{color:#ff8a8a}
 .welcome.error .welBar{display:none}
 @media print{.welcome{display:none!important}}
+
+/* ================= GAME HUD THEME ================= */
+:root{--hudA:#26d6a1;--hudB:#4da3ff;--hudC:#b07cff;--fontHud:"Orbitron","Rajdhani","Segoe UI",Arial,sans-serif}
+.app{position:relative;z-index:1}
+#hudBg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:
+ radial-gradient(48% 38% at 8% 0%,#12b78a1f,transparent 65%),
+ radial-gradient(45% 38% at 95% 8%,#1c8eea29,transparent 65%),
+ radial-gradient(55% 45% at 60% 108%,#a855f71f,transparent 60%)}
+#hudBg .hbGrid{position:absolute;inset:-2px;background-image:linear-gradient(#7fe9c814 1px,transparent 1px),linear-gradient(90deg,#4da3ff14 1px,transparent 1px);background-size:100% 46px,46px 100%;animation:hbScroll 22s linear infinite}
+@keyframes hbScroll{to{background-position:0 46px,46px 0}}
+#hudBg .hbSweep{position:absolute;left:-10%;width:120%;height:2px;background:linear-gradient(90deg,transparent,#26d6a159,transparent);animation:hbSweep 11s ease-in-out infinite}
+#hudBg .hbSweep.s2{background:linear-gradient(90deg,transparent,#4da3ff59,transparent);animation-delay:-5.5s}
+@keyframes hbSweep{0%{top:-4%;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:104%;opacity:0}}
+#hudBg .hbChart{position:absolute;opacity:.14;filter:drop-shadow(0 0 14px #26d6a14d);animation:hbFloat 13s ease-in-out infinite}
+#hudBg .hbChart.hc2{animation-delay:-4.5s}#hudBg .hbChart.hc3{animation-delay:-9s}
+@keyframes hbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px)}}
+#hudBg svg{display:block;width:100%;height:100%}
+.side{background:linear-gradient(180deg,#0a1728f2,#06101cf2);border-right:1px solid #24415f;box-shadow:1px 0 26px #0008}
+.logoMark{font-family:var(--fontHud);box-shadow:0 0 0 1px #26d6a159,0 0 22px #26d6a14d;animation:markPulse 3.4s ease-in-out infinite}
+@keyframes markPulse{0%,100%{box-shadow:0 0 0 1px #26d6a159,0 0 18px #26d6a145}50%{box-shadow:0 0 0 1px #4da3ff8c,0 0 30px #4da3ff59}}
+.logo b{font-family:var(--fontHud);letter-spacing:.4px}
+nav button{font-family:var(--fontHud);font-size:12px;letter-spacing:.8px;text-transform:uppercase;position:relative;overflow:hidden}
+nav button::before{content:"";position:absolute;left:0;top:16%;bottom:16%;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(#26d6a1,#4da3ff);opacity:0;transition:.22s}
+nav button::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#26d6a124,transparent 55%);opacity:0;transition:.25s}
+nav button:hover::before,nav button.active::before{opacity:1}
+nav button:hover::after{opacity:1}
+nav button.active{color:#eafff8;text-shadow:0 0 14px #26d6a199;box-shadow:inset 0 0 0 1px #26d6a133}
+.top h1{font-family:var(--fontHud);letter-spacing:.5px;background:linear-gradient(92deg,#eaf2fb,#7fe9c8 55%,#4da3ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.top p{letter-spacing:.4px}
+button.primary,.primary{position:relative;overflow:hidden;box-shadow:0 8px 22px #0f8f7455,inset 0 0 0 1px #ffffff21;letter-spacing:.4px;transition:transform .14s,box-shadow .22s,filter .22s}
+button.primary::after,.primary::after{content:"";position:absolute;top:0;left:-60%;width:32%;height:100%;background:linear-gradient(90deg,transparent,#ffffff55,transparent);transform:skewX(-20deg);animation:btnShine 3.4s ease-in-out infinite}
+@keyframes btnShine{0%,55%{left:-60%}100%{left:135%}}
+button.primary:hover,.primary:hover{filter:brightness(1.12);box-shadow:0 10px 30px #1c8eea6b}
+button.secondary{position:relative;transition:transform .14s,box-shadow .22s,border-color .22s}
+button.secondary:hover{border-color:#3f7fa8;box-shadow:0 0 0 1px #4da3ff33,0 8px 20px #0006}
+button:active{transform:scale(.965)}
+.panel{position:relative;overflow:hidden;background:linear-gradient(160deg,#102439ee,#0a1727ee);box-shadow:0 20px 44px #0007}
+.panel::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,#26d6a1,#4da3ff,#b07cff,#26d6a1);background-size:300% 100%;animation:panelFlow 7s linear infinite}
+@keyframes panelFlow{to{background-position:300% 0}}
+.panel h2{font-family:var(--fontHud);letter-spacing:.6px}
+.card{position:relative;background:linear-gradient(150deg,#12283f,#0a1727);box-shadow:0 16px 34px #0008}
+.card::before,.card::after{content:"";position:absolute;width:14px;height:14px;border-color:#26d6a166;opacity:0;transition:.25s;pointer-events:none}
+.card::before{left:7px;top:7px;border-top:2px solid;border-left:2px solid}
+.card::after{right:7px;bottom:7px;border-right:2px solid;border-bottom:2px solid}
+.card:hover::before,.card:hover::after{opacity:1;width:22px;height:22px}
+.card:hover{box-shadow:0 0 0 1px #26d6a159,0 22px 44px #000a}
+.card .label{font-family:var(--fontHud)}
+.card .value{font-family:var(--fontHud);letter-spacing:.2px;text-shadow:0 0 20px #26d6a133}
+#dashCards .card{animation:cardIn .5s cubic-bezier(.2,.75,.3,1) both}
+#dashCards .card:nth-child(2){animation-delay:.05s}#dashCards .card:nth-child(3){animation-delay:.1s}
+#dashCards .card:nth-child(4){animation-delay:.15s}#dashCards .card:nth-child(5){animation-delay:.2s}
+#dashCards .card:nth-child(6){animation-delay:.25s}#dashCards .card:nth-child(7){animation-delay:.3s}
+#dashCards .card:nth-child(8){animation-delay:.35s}#dashCards .card:nth-child(9){animation-delay:.4s}
+#dashCards .card:nth-child(10){animation-delay:.45s}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+th{background:linear-gradient(180deg,#152e46,#0e2032);letter-spacing:1px}
+tbody tr{transition:background .18s,box-shadow .18s}
+tbody tr:hover{background:#17334c70;box-shadow:inset 3px 0 0 #26d6a1}
+.pill{background:#123048;border:1px solid #27506f}
+.form input:focus,.form select:focus,.form textarea:focus,.filters input:focus,.filters select:focus{border-color:#26d6a1;box-shadow:0 0 0 3px #26d6a124}
+.filters input,.filters select,.form input,.form select,.form textarea{transition:border-color .2s,box-shadow .2s}
+.toast{background:linear-gradient(140deg,#12324c,#0d1f31);border:1px solid #2f7f9f;box-shadow:0 0 0 1px #26d6a133,0 18px 40px #000a}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#081522}
+::-webkit-scrollbar-thumb{background:linear-gradient(#1d8f78,#2b6d9e);border-radius:8px}
+@media (prefers-reduced-motion:reduce){#hudBg *,nav button::after,.primary::after,.panel::before,.logoMark{animation:none!important}}
+
+/* ================= LOGIN SCREEN (dynamic) ================= */
+.authScreen{display:none;position:fixed;inset:0;z-index:500;align-items:center;justify-content:center;padding:18px;overflow:hidden;background:radial-gradient(120% 95% at 50% -12%,#17415f 0%,#0a1c2e 45%,#040a13 100%)}
+.authBg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.abOrb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4;animation:abFloat 12s ease-in-out infinite}
+.abOrb.a1{width:360px;height:360px;background:#26d6a1;left:-90px;top:-70px}
+.abOrb.a2{width:420px;height:420px;background:#1c8eea;right:-120px;bottom:-140px;animation-delay:-5s}
+.abOrb.a3{width:300px;height:300px;background:#b07cff;left:45%;top:-120px;opacity:.25;animation-delay:-8s}
+@keyframes abFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(28px,22px)}}
+.abGrid{position:absolute;inset:-2px;background-image:linear-gradient(#7fe9c814 1px,transparent 1px),linear-gradient(90deg,#4da3ff16 1px,transparent 1px);background-size:100% 44px,44px 100%;-webkit-mask-image:radial-gradient(80% 70% at 50% 45%,#000 35%,transparent 100%);mask-image:radial-gradient(80% 70% at 50% 45%,#000 35%,transparent 100%);animation:abScroll 26s linear infinite}
+@keyframes abScroll{to{background-position:0 44px,44px 0}}
+.abChart{position:absolute;opacity:.16;filter:drop-shadow(0 0 16px #26d6a14d);animation:abFloat 15s ease-in-out infinite}
+.abChart.k2{animation-delay:-5s}.abChart.k3{animation-delay:-10s}.abChart.k4{animation-delay:-2.5s}
+.abChart svg{display:block;width:100%;height:100%}
+.abDot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7fe9c8;opacity:.5;box-shadow:0 0 10px #26d6a1;animation:abRise 14s linear infinite}
+@keyframes abRise{0%{transform:translateY(20vh) scale(.6);opacity:0}15%{opacity:.6}100%{transform:translateY(-95vh) scale(1);opacity:0}}
+.authWrap{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:34px;flex-wrap:wrap;width:min(1020px,100%)}
+.authHero{flex:1 1 330px;max-width:470px}
+.authHero .brandRow{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.authHero h3{font-family:var(--fontHud);font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:0 0 10px;letter-spacing:.5px;background:linear-gradient(95deg,#eafff8,#7fe9c8 45%,#4da3ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.authTicker{min-height:44px;margin:0 0 16px;color:#a9c3d8;font-size:14.5px;line-height:1.45;transition:opacity .35s}
+.authTicker.fade{opacity:0}
+.heroStats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.heroStats div{padding:11px 12px;border-radius:12px;background:#0b1c2dcc;border:1px solid #23425f}
+.heroStats b{display:block;font-family:var(--fontHud);font-size:16px;color:#7fe9c8}
+.heroStats span{font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:#8ea5bc}
+.heroChart{border:1px solid #23425f;border-radius:14px;background:#081826b9;padding:10px 12px 4px;box-shadow:0 18px 40px #0008}
+.heroChart svg{display:block;width:100%;height:auto}
+.heroChart .draw{stroke-dasharray:620;stroke-dashoffset:620;animation:drawIn 3.4s ease forwards}
+@keyframes drawIn{to{stroke-dashoffset:0}}
+.heroChart small{display:block;color:#7f9ab3;font-size:10.5px;letter-spacing:1.1px;text-transform:uppercase;padding:4px 0 6px}
+.authBox{position:relative;flex:0 1 412px;width:min(412px,100%);display:flex;flex-direction:column;gap:12px;padding:26px 24px;border-radius:18px;background:linear-gradient(165deg,#0e2138f0,#081521f5);border:1px solid #2b4d6d;box-shadow:0 34px 80px #000c;backdrop-filter:blur(9px);animation:authIn .65s cubic-bezier(.2,.8,.25,1) both}
+.authBox::before{content:"";position:absolute;inset:-1px;border-radius:18px;padding:1px;background:linear-gradient(135deg,#26d6a1b3,#4da3ff59 45%,transparent 75%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+@keyframes authIn{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+.authBox h2{margin:6px 0 0;font-family:var(--fontHud);letter-spacing:.6px;font-size:21px}
+.authBox .logo{border:0;margin:0 0 2px;padding:0}
+.authBox .field{display:flex;flex-direction:column;gap:6px;position:relative}
+.authBox input{background:#06121f;border:1px solid #29425c;color:white;padding:12px;border-radius:10px;font-size:14.5px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+.authBox input:focus{border-color:#26d6a1;box-shadow:0 0 0 3px #26d6a124}
+.authBox label{font-size:12px;color:#93aec5;letter-spacing:.7px;text-transform:uppercase;font-family:var(--fontHud)}
+.pwWrap{position:relative}.pwWrap input{padding-right:44px}
+.pwEye{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:#7f9ab3;font-size:16px;padding:7px 9px;border-radius:8px;line-height:1}
+.pwEye:hover{color:#7fe9c8;background:#123048}
+.capsHint{display:none;color:#ffc857;font-size:11.5px;margin:0}
+.capsHint.on{display:block}
+.authMsg{color:#ff8a8a;min-height:18px;margin:0;font-size:13px}
+.authMsg.ok{color:#26d6a1}
+.authRow{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:#93aec5}
+.authRow label{display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;letter-spacing:0;font-family:inherit;font-size:12.5px;color:#93aec5}
+.authRow input{width:16px;height:16px;accent-color:#26d6a1}
+.authSafe{display:flex;align-items:center;justify-content:center;gap:7px;color:#7f9ab3;font-size:11.5px;letter-spacing:.5px;margin:0}
+.authShake{animation:shake .38s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+@media(max-width:900px){.authHero{display:none!important}.authWrap{gap:0}}
+.abTape{position:absolute;left:0;right:0;bottom:0;height:30px;overflow:hidden;background:linear-gradient(90deg,#040a13e6,#0a1c2ecc,#040a13e6);border-top:1px solid #23425f;display:flex;align-items:center}
+.abTapeIn{display:inline-flex;gap:38px;white-space:nowrap;padding-left:100%;animation:abTape 38s linear infinite;font-family:var(--fontHud);font-size:11px;letter-spacing:1.2px;color:#7f9ab3}
+.abTapeIn b{color:#7fe9c8;font-weight:700}.abTapeIn i{font-style:normal;color:#ff8a9a}
+@keyframes abTape{to{transform:translateX(-100%)}}
+.authBox::after{content:"";position:absolute;left:14px;right:14px;top:0;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#26d6a1,#4da3ff,transparent);animation:authScan 4.5s ease-in-out infinite;pointer-events:none;opacity:.8}
+@keyframes authScan{0%{top:2px;opacity:0}10%{opacity:.85}90%{opacity:.85}100%{top:calc(100% - 4px);opacity:0}}
+.authBtn{letter-spacing:1.4px;text-transform:uppercase;font-family:var(--fontHud);font-size:13px}
+.heroLive{display:flex;align-items:center;gap:7px;font-size:11px;color:#7fe9c8;letter-spacing:1.4px;text-transform:uppercase;font-family:var(--fontHud);margin:0 0 10px}
+.heroLive:before{content:"";width:8px;height:8px;border-radius:50%;background:#26d6a1;box-shadow:0 0 10px #26d6a1;animation:liveBlink 1.2s ease-in-out infinite}
+@keyframes liveBlink{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.abTapeIn,.authBox::after{animation:none!important}}
+
+/* ================= POST-LOGIN LAUNCH ================= */
+.launch{background:radial-gradient(circle at 50% 18%,#15436a 0%,#071627 45%,#03090f 100%);z-index:650}
+.launch .welBox{width:min(470px,100%);border-color:#2c5b86;background:linear-gradient(165deg,#0d2338e0,#071522f0);box-shadow:0 30px 70px #000c,0 0 0 1px #26d6a124}
+.lchBar{height:12px;border-radius:9px;background:#081a2a;border:1px solid #2c5b86;overflow:hidden;position:relative;box-shadow:inset 0 0 12px #0009}
+.lchBar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#26d6a1,#4da3ff);box-shadow:0 0 16px #26d6a1b3;transition:width .1s linear}
+.lchBar::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 9px,#00000059 9px 11px);pointer-events:none}
+.lchStat{display:flex;align-items:baseline;justify-content:center;gap:8px;margin:14px 0 2px}
+.lchStat b{font-family:var(--fontHud);font-size:32px;color:#7fe9c8;text-shadow:0 0 22px #26d6a180;line-height:1}
+.lchStat span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8ea5bc}
+.lchList{display:grid;gap:7px;margin:16px 0 4px;text-align:left}
+.lchList div{display:flex;gap:10px;align-items:center;font-size:12.5px;color:#7f9ab3;opacity:.6;transition:color .25s,opacity .25s}
+.lchList div.now{color:#eaf2fb;opacity:1}
+.lchList div.done{color:#9fe8cd;opacity:.85}
+.lchDot{width:17px;height:17px;border-radius:50%;border:2px solid #2b4a66;display:grid;place-items:center;font-size:10px;flex:none;color:#04111b;transition:.25s}
+.lchList div.done .lchDot{border-color:#26d6a1;background:#26d6a1;box-shadow:0 0 12px #26d6a180}
+.lchSkip{margin:12px 0 0;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#6b8299}
+@media print{#hudBg,.welcome,#launchScreen,.authScreen,.authBg,.userBadge{display:none!important}}
+/* ================= DAY MODE (light theme) ================= */
+.themeBtn{min-width:96px}
+@media screen{
+body.day{--bg:#eef3f8;--panel:#ffffff;--panel2:#f4f8fb;--line:#d5e0ea;--text:#13283d;--muted:#5d7287;--accent:#0f9f78;--blue:#1f6fd1;--gold:#b37800;--red:#d23a52;color:#13283d;background:linear-gradient(135deg,#f4f8fb,#e8f0f7 45%,#eef4f9)}
+body.day #hudBg{background:radial-gradient(48% 38% at 8% 0%,#12b78a14,transparent 65%),radial-gradient(45% 38% at 95% 8%,#1c8eea14,transparent 65%)}
+body.day #hudBg .hbGrid{background-image:linear-gradient(#0f9f7812 1px,transparent 1px),linear-gradient(90deg,#1f6fd112 1px,transparent 1px)}
+body.day #hudBg .hbChart{opacity:.1;filter:none}
+body.day .side{background:linear-gradient(180deg,#ffffff,#f3f7fb);border-right:1px solid #d5e0ea;box-shadow:1px 0 18px #10243a14}
+body.day .logo{border-bottom-color:#d5e0ea}body.day .logo small{color:#5d7287}
+body.day nav button{color:#40566c}
+body.day nav button:hover,body.day nav button.active{background:linear-gradient(90deg,#e3f5ef,#eaf2fb);color:#0b5c47;text-shadow:none}
+body.day nav button.active{box-shadow:inset 0 0 0 1px #0f9f7840}
+body.day .top h1{background:linear-gradient(92deg,#10243a,#0f9f78 60%,#1f6fd1);-webkit-background-clip:text;background-clip:text}
+body.day .top p,body.day .userBadge,body.day .main .hint,body.day .modal .hint{color:#5d7287}
+body.day .panel{background:#ffffff;border-color:#d5e0ea;box-shadow:0 10px 26px #10243a14}
+body.day .card{background:linear-gradient(150deg,#ffffff,#f3f8fc);border-color:#d5e0ea;box-shadow:0 8px 22px #10243a12}
+body.day .card:hover{box-shadow:0 0 0 1px #0f9f7840,0 14px 30px #10243a1f}
+body.day .card .label,body.day .card .sub{color:#5d7287}
+body.day .card .value{text-shadow:none;color:#10243a}
+body.day .filters{background:#ffffff;border-color:#d5e0ea}
+body.day .filters label,body.day .form label{color:#5d7287}
+body.day .filters input,body.day .filters select,body.day .form input,body.day .form select,body.day .form textarea,body.day .lgTools select{background:#f7fafc;border-color:#c7d5e2;color:#13283d}
+body.day input[type=date]::-webkit-calendar-picker-indicator,body.day input[type=month]::-webkit-calendar-picker-indicator{filter:none}
+body.day th{background:linear-gradient(180deg,#eef4f9,#e4edf5);color:#40566c}
+body.day th,body.day td{border-bottom-color:#e1e9f0}
+body.day tbody tr:hover{background:#eaf5f1;box-shadow:inset 3px 0 0 #0f9f78}
+body.day .kpiLine{border-bottom-color:#e1e9f0}
+body.day .main .pill{background:#e8f1f8;border-color:#c7d5e2;color:#35556f}
+body.day .main button.secondary,body.day .modal button.secondary{background:#ffffff;border-color:#c7d5e2;color:#1d3850}
+body.day .main button.secondary:hover,body.day .modal button.secondary:hover{border-color:#0f9f78;box-shadow:0 6px 16px #10243a1a}
+body.day .note{background:#fff7e0;border-color:#f0d58a;color:#7a5600}
+body.day .toast{background:#ffffff;border-color:#c7d5e2;color:#13283d;box-shadow:0 14px 34px #10243a2e}
+body.day .modalBg{background:#10243a66}
+body.day .chk{background:#f7fafc;border-color:#c7d5e2}
+body.day .logoThumb{border-color:#9fb3c4;color:#5d7287;background:#f3f7fb}
+body.day .empty{color:#5d7287}
+body.day .bar{background:#e1e9f0}
+body.day tr.totalRow td{border-top-color:#9fb3c4}
+body.day ::-webkit-scrollbar-track{background:#e8eff5}
+body.day .sideClose{background:#ffffff;border-color:#c7d5e2;color:#13283d}
+}
+@media(max-width:900px){body.day .side::after{background:#10243a55}}
+
+
+/* ================= BETTER PRINT: bigger fonts + all-time total ================= */
+.printOnlyBlock{display:none}
+.dplBlock{margin:12px 0 0}
+@media print{
+ html,body{background:#fff!important;color:#111!important}
+ *{animation:none!important;transition:none!important;text-shadow:none!important;transform:none!important}
+ .card,.panel,.form,.filters{box-shadow:none!important}
+ .card::after,#dashboard #dashCards .card::before+.card::after{display:none!important}
+ .panel::before,button.primary::after,.primary::after{display:none!important}
+ table{font-size:12.5px!important}
+ th{font-size:11px!important;background:#eef3f7!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ th,td{padding:6.5px 7px!important;border-color:#c9d2da!important;color:#111!important}
+ thead{display:table-header-group!important}
+ tr{break-inside:avoid!important}
+ tbody tr:hover{background:none!important;box-shadow:none!important}
+ .panel h2{font-size:14.5px!important;color:#111!important}
+ .kpiLine{font-size:12.5px!important;padding:5px 0!important;color:#111!important}
+ .pill{font-size:10px!important;background:#eef3f7!important;color:#111!important;border-color:#c9d2da!important}
+ .card .label{font-size:9.5px!important;font-family:Arial,sans-serif!important}.card .sub{font-size:9.5px!important}
+ .repTitle{font-size:16px!important}
+ .expMatrix th,.expMatrix td{font-size:10.5px!important;padding:5px!important}
+ body.printDashAll #dashboard .printOnlyBlock,body.printDashAll #dashboard .printSummary{display:block!important}
+ #dashPrintBanner{display:block;border:1.6px solid #0f8f74;border-radius:9px;padding:9px 12px;margin:8px 0 12px;background:#eefaf5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #dashPrintBanner h2{margin:0 0 3px;font-size:15px;color:#0d3b2e}
+ #dashPrintBanner p{margin:0;font-size:11px;color:#3f5a52}
+ body.printDashAll #dashboard .printSummary{margin:0 0 12px}
+ body.printDashAll #dashboard #printSummary{display:none!important}
+ #dashPrintBanner{margin-top:16px!important;break-inside:avoid}
+ #dashPrintBanner h2{font-size:16px!important}
+ #dashPrintBanner p{font-size:11.5px!important}
+ .dplGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
+ .dplGrid .dplTable{break-inside:avoid}
+ .dplBlock{break-inside:auto}
+ .printSummaryTable{font-size:12px!important}
+ .printSummaryTable td{padding:6.5px 7px!important}
+ .printSummaryTitle{font-size:14.5px!important;margin-bottom:7px!important}
+ #dashboard #dashCards{gap:10px!important}
+ #dashboard #dashCards .label{font-size:9.5px!important}
+ #dashboard #dashCards .value{font-size:18px!important;font-family:Arial,sans-serif!important;color:#10243a!important}
+ #dashboard #dashCards .sub{font-size:9px!important}
+ #dashboard #dashCards .card{padding:12px 13px 12px 18px!important}
+ .dplTitle{font-size:14px!important;font-weight:800;color:#10243a!important;border-left:5px solid #0f8f74;padding:0 0 0 9px;margin:0 0 7px!important}
+ .dplNote{font-size:10.5px!important;color:#4a5c6b!important;margin:0 0 6px!important}
+ .dplTable{width:100%;border-collapse:collapse;font-size:12px!important}
+ .dplTable th{background:#eef3f7!important;font-size:10.5px!important;text-transform:uppercase;letter-spacing:.6px;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;border-bottom:1.6px solid #10243a!important}
+ .dplTable td{padding:6.5px 7px!important;border-bottom:1px solid #d5dce2!important;color:#111!important}
+ .dplTable td.in{color:#0b7a5c!important}.dplTable td.out{color:#b42318!important}
+ .dplTable tr.dplTotal td{border-top:2px solid #10243a!important;font-weight:800;background:#f3f7fa!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .dplLedger{break-before:page}
+ #dashboard .reportHead p{font-size:10.5px!important;line-height:1.7!important}
+ #dashboard .reportHead h1{font-size:24px!important}
+ /* Dashboard print: bare fonts + wazeh date */
+ #dashboard .reportHead{align-items:flex-end!important;padding-bottom:12px!important;margin-bottom:18px!important}
+ #dashboard .reportHead h1{font-size:28px!important}
+ #dashboard .reportHead h1::after{font-size:12px!important;margin-top:6px!important}
+ #dashboard .reportHead p{font-size:11px!important;font-weight:700!important;color:#10243a!important;line-height:1.5!important;border:0!important;padding:0!important;background:none!important}
+ #dashboard #dashCards{gap:12px!important}
+ #dashboard #dashCards .card{padding:15px 14px 14px 20px!important}
+ #dashboard #dashCards .label{font-size:12px!important;letter-spacing:.8px!important;color:#33475a!important;font-weight:800!important}
+ #dashboard #dashCards .value{font-size:21px!important;margin:8px 0 6px!important;white-space:nowrap}
+ #dashboard #dashCards .sub{font-size:11.5px!important;color:#33475a!important;line-height:1.4!important}
+ #dashboard #dashCards::after{font-size:10px!important}
+ /* Dashboard print: sirf header + cards */
+ body[data-page=dashboard]:not(.printOnly) #dashboard>*:not(.reportHead):not(#dashCards){display:none!important}
+}
 </style>
 </head>
 <body>
+<div id="hudBg" aria-hidden="true">
+ <div class="hbGrid"></div>
+ <div class="hbSweep"></div><div class="hbSweep s2"></div>
+ <div class="hbChart" style="left:6%;top:14%;width:300px;height:170px">
+  <svg viewBox="0 0 300 170" fill="none"><polyline points="0,140 40,118 78,128 118,86 156,100 196,58 236,72 300,22" stroke="#26d6a1" stroke-width="3"/><polyline points="0,155 40,150 78,152 118,142 156,146 196,132 236,138 300,118" stroke="#4da3ff" stroke-width="2" stroke-dasharray="6 6"/><g fill="#26d6a1"><circle cx="118" cy="86" r="4"/><circle cx="196" cy="58" r="4"/><circle cx="300" cy="22" r="4"/></g></svg>
+ </div>
+ <div class="hbChart hc2" style="right:5%;top:52%;width:260px;height:190px">
+  <svg viewBox="0 0 260 190" fill="none"><g fill="#4da3ff"><rect x="10" y="120" width="26" height="60" rx="4" opacity=".7"/><rect x="48" y="86" width="26" height="94" rx="4" opacity=".55"/><rect x="86" y="104" width="26" height="76" rx="4" opacity=".8"/><rect x="124" y="52" width="26" height="128" rx="4" opacity=".6"/><rect x="162" y="76" width="26" height="104" rx="4" opacity=".75"/><rect x="200" y="30" width="26" height="150" rx="4" opacity=".5"/></g><line x1="0" y1="182" x2="260" y2="182" stroke="#7fe9c8" stroke-width="2"/></svg>
+ </div>
+ <div class="hbChart hc3" style="left:44%;bottom:6%;width:200px;height:200px">
+  <svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="70" stroke="#123048" stroke-width="26"/><circle cx="100" cy="100" r="70" stroke="#26d6a1" stroke-width="26" stroke-dasharray="180 440" transform="rotate(-90 100 100)"/><circle cx="100" cy="100" r="70" stroke="#b07cff" stroke-width="26" stroke-dasharray="90 440" stroke-dashoffset="-200" transform="rotate(-90 100 100)"/></svg>
+ </div>
+</div>
 <div class="app">
 <aside class="side">
  <button class="sideClose" onclick="closeSide()" aria-label="Close menu">×</button>
@@ -190,7 +464,7 @@ body.roleOperator .adminOnly{display:none!important}
 <main class="main">
  <div class="top">
   <div><button class="secondary mobileMenu" onclick="toggleSide()">☰</button><h1 id="pageTitle">Business Dashboard</h1><p id="todayText"></p></div>
-  <div class="actions"><span class="userBadge" id="userBadge"></span><button class="secondary adminOnly" onclick="exportData()">Backup</button><button class="secondary adminOnly" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button><button class="secondary" onclick="logout()">Logout</button></div>
+  <div class="actions"><span class="userBadge" id="userBadge"></span><button class="secondary adminOnly" onclick="exportData()">Backup</button><button class="secondary adminOnly" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button><button class="secondary themeBtn noPrint" id="themeBtn" onclick="toggleTheme()">&#9728; Day</button><button class="secondary" onclick="logout()">Logout</button></div>
  </div>
 
  <div class="printHead" id="printHead"><h1 id="phBiz"></h1><h2 id="phTitle"></h2><p id="phInfo"></p></div>
@@ -202,8 +476,10 @@ body.roleOperator .adminOnly{display:none!important}
   </div>
   <div id="dashNote"></div>
   <div class="reportHead"><h1 id="printBusiness">Business Finance Report</h1><p id="printPeriod"></p></div>
-  <div id="printSummary" class="printSummary"></div>
   <div class="grid" id="dashCards"></div>
+  <div id="dashPrintBanner" class="printOnlyBlock"></div>
+  <div id="printSummary" class="printSummary"></div>
+  <div id="dashPrintLedger" class="printOnlyBlock"></div>
   <div class="two section">
    <div class="panel"><div class="sectionTitle"><h2>Cash Position</h2><span class="pill">Automatic</span></div><div id="cashBreakdown"></div></div>
    <div class="panel"><div class="sectionTitle"><h2>Profitability</h2><span class="pill">Selected period</span></div><div id="profitBreakdown"></div></div>
@@ -397,23 +673,91 @@ body.roleOperator .adminOnly{display:none!important}
  </div>
 </div>
 <div class="authScreen" id="authScreen">
- <div class="authBox panel">
-  <div class="logo"><div class="logoMark">BF</div><div><b>Business Finance OS</b><small>Cash • Investment • Profit</small></div></div>
-  <div id="authSetup">
-   <h2>Admin Account Banayein</h2><p class="hint">Pehli dafa ke liye Admin ka account banayein. Yahi account baad mein doosre users bana sakega.</p>
-   <div class="field"><label>Naam</label><input id="suName"></div>
-   <div class="field"><label>Username</label><input id="suUser" autocomplete="off"></div>
-   <div class="field"><label>Password</label><input id="suPass" type="password" autocomplete="new-password"></div>
-   <div class="field"><label>Password Dobara</label><input id="suPass2" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSetup()"></div>
-   <button class="primary authBtn" onclick="doSetup()">Account Banayein</button>
+ <div class="authBg">
+  <div class="abOrb a1"></div><div class="abOrb a2"></div><div class="abOrb a3"></div>
+  <div class="abGrid"></div>
+  <div class="abChart" style="left:4%;top:8%;width:340px;height:190px">
+   <svg viewBox="0 0 340 190" fill="none"><polyline points="0,160 45,132 90,145 135,96 180,112 225,64 270,80 340,26" stroke="#26d6a1" stroke-width="3"/><polyline points="0,175 45,168 90,171 135,156 180,162 225,142 270,150 340,124" stroke="#4da3ff" stroke-width="2" stroke-dasharray="5 7"/><g fill="#7fe9c8"><circle cx="135" cy="96" r="4"/><circle cx="225" cy="64" r="4"/><circle cx="340" cy="26" r="5"/></g></svg>
   </div>
-  <div id="authLogin">
-   <h2>Login</h2>
-   <div class="field"><label>Username</label><input id="liUser" autocomplete="username" onkeydown="if(event.key==='Enter')$('liPass').focus()"></div>
-   <div class="field"><label>Password</label><input id="liPass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-   <button class="primary authBtn" onclick="doLogin()">Login</button>
+  <div class="abChart k2" style="right:5%;top:16%;width:280px;height:210px">
+   <svg viewBox="0 0 280 210" fill="none"><g fill="#4da3ff"><rect x="12" y="132" width="30" height="70" rx="5" opacity=".8"/><rect x="54" y="96" width="30" height="106" rx="5" opacity=".55"/><rect x="96" y="118" width="30" height="84" rx="5" opacity=".75"/><rect x="138" y="60" width="30" height="142" rx="5" opacity=".6"/><rect x="180" y="86" width="30" height="116" rx="5" opacity=".8"/><rect x="222" y="36" width="30" height="166" rx="5" opacity=".5"/></g><line x1="0" y1="204" x2="280" y2="204" stroke="#26d6a1" stroke-width="2"/></svg>
   </div>
-  <p class="authMsg" id="authMsg"></p>
+  <div class="abChart k3" style="left:8%;bottom:9%;width:230px;height:230px">
+   <svg viewBox="0 0 230 230" fill="none"><circle cx="115" cy="115" r="80" stroke="#12304a" stroke-width="30"/><circle cx="115" cy="115" r="80" stroke="#26d6a1" stroke-width="30" stroke-dasharray="200 502" transform="rotate(-90 115 115)"/><circle cx="115" cy="115" r="80" stroke="#b07cff" stroke-width="30" stroke-dasharray="104 502" stroke-dashoffset="-220" transform="rotate(-90 115 115)"/><circle cx="115" cy="115" r="80" stroke="#4da3ff" stroke-width="30" stroke-dasharray="98 502" stroke-dashoffset="-344" transform="rotate(-90 115 115)"/></svg>
+  </div>
+  <div class="abChart k4" style="right:9%;bottom:7%;width:300px;height:160px">
+   <svg viewBox="0 0 300 160" fill="none"><g stroke-width="3"><g stroke="#26d6a1"><line x1="30" y1="30" x2="30" y2="120"/><rect x="20" y="52" width="20" height="46" fill="#26d6a14d"/><line x1="80" y1="60" x2="80" y2="140"/><rect x="70" y="82" width="20" height="40" fill="#26d6a14d"/><line x1="230" y1="24" x2="230" y2="104"/><rect x="220" y="44" width="20" height="42" fill="#26d6a14d"/></g><g stroke="#ff647c"><line x1="130" y1="40" x2="130" y2="130"/><rect x="120" y="64" width="20" height="48" fill="#ff647c40"/><line x1="180" y1="70" x2="180" y2="150"/><rect x="170" y="92" width="20" height="44" fill="#ff647c40"/><line x1="278" y1="50" x2="278" y2="140"/><rect x="268" y="74" width="20" height="50" fill="#ff647c40"/></g></g></svg>
+  </div>
+  <div class="abDot" style="left:18%;top:70%;animation-delay:-2s"></div>
+  <div class="abDot" style="left:36%;top:82%;animation-delay:-6s"></div>
+  <div class="abDot" style="left:62%;top:74%;animation-delay:-9s"></div>
+  <div class="abDot" style="left:80%;top:88%;animation-delay:-4s"></div>
+  <div class="abDot" style="left:50%;top:92%;animation-delay:-12s"></div>
+  <div class="abChart k2" style="left:38%;top:3%;width:260px;height:120px">
+   <svg viewBox="0 0 260 120" fill="none"><defs><linearGradient id="abAr2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b07cff" stop-opacity=".6"/><stop offset="1" stop-color="#b07cff" stop-opacity="0"/></linearGradient></defs><path d="M0 100 L32 84 L64 90 L96 60 L128 70 L160 40 L192 52 L224 22 L260 30 L260 120 L0 120Z" fill="url(#abAr2)"/><polyline points="0,100 32,84 64,90 96,60 128,70 160,40 192,52 224,22 260,30" stroke="#b07cff" stroke-width="2.5"/></svg>
+  </div>
+  <div class="abChart k3" style="right:30%;bottom:3%;width:240px;height:110px">
+   <svg viewBox="0 0 240 110" fill="none"><g fill="#26d6a1"><rect x="6" y="70" width="14" height="36" rx="3" opacity=".7"/><rect x="28" y="52" width="14" height="54" rx="3" opacity=".6"/><rect x="50" y="62" width="14" height="44" rx="3" opacity=".8"/><rect x="72" y="34" width="14" height="72" rx="3" opacity=".6"/><rect x="94" y="44" width="14" height="62" rx="3" opacity=".75"/><rect x="116" y="20" width="14" height="86" rx="3" opacity=".5"/><rect x="138" y="30" width="14" height="76" rx="3" opacity=".7"/><rect x="160" y="10" width="14" height="96" rx="3" opacity=".6"/></g><polyline points="13,66 35,48 57,58 79,30 101,40 123,16 145,26 167,6 235,4" stroke="#4da3ff" stroke-width="2"/></svg>
+  </div>
+  <div class="abTape" aria-hidden="true"><div class="abTapeIn" id="abTape"></div></div>
+ </div>
+ <div class="authWrap">
+  <div class="authHero">
+   <div class="brandRow"><div class="logo"><div class="logoMark">BF</div><div><b>Business Finance OS</b><small>Cash &bull; Investment &bull; Profit</small></div></div></div>
+   <p class="heroLive" id="heroClock">Live</p>
+   <h3>Saaf hisaab,<br>mazboot karobar</h3>
+   <p class="authTicker" id="authTicker">Sales, purchases, udhaar aur munafa &mdash; sab kuch ek hi screen par, live sync ke saath.</p>
+   <div class="heroStats">
+    <div><b id="heroEntries">0</b><span>Records</span></div>
+    <div><b id="heroToday">0</b><span>Aaj ki entries</span></div>
+    <div><b>LIVE</b><span>Cloud sync</span></div>
+   </div>
+   <div class="heroChart">
+    <small>Cash flow &mdash; pichle 7 din</small>
+    <svg viewBox="0 0 320 110" fill="none">
+     <defs><linearGradient id="hgArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26d6a1" stop-opacity=".55"/><stop offset="1" stop-color="#26d6a1" stop-opacity="0"/></linearGradient></defs>
+     <g stroke="#1d3a55" stroke-width="1"><line x1="0" y1="26" x2="320" y2="26"/><line x1="0" y1="55" x2="320" y2="55"/><line x1="0" y1="84" x2="320" y2="84"/></g>
+     <path d="M0 86 L46 68 L92 74 L138 46 L184 56 L230 28 L276 38 L320 14 L320 110 L0 110 Z" fill="url(#hgArea)"/>
+     <polyline class="draw" points="0,86 46,68 92,74 138,46 184,56 230,28 276,38 320,14" stroke="#26d6a1" stroke-width="3" stroke-linecap="round"/>
+     <g fill="#7fe9c8"><circle cx="138" cy="46" r="3.5"/><circle cx="230" cy="28" r="3.5"/><circle cx="320" cy="14" r="4"/></g>
+    </svg>
+   </div>
+  </div>
+  <div class="authBox">
+   <div class="logo"><div class="logoMark">BF</div><div><b id="authBrand">Business Finance OS</b><small>Cash &bull; Investment &bull; Profit</small></div></div>
+   <div id="authSetup">
+    <h2>Admin Account Banayein</h2><p class="hint">Pehli dafa ke liye Admin ka account banayein. Yahi account baad mein doosre users bana sakega.</p>
+    <div class="field"><label>Naam</label><input id="suName" onkeydown="authEnter(event,'suUser')"></div>
+    <div class="field"><label>Username</label><input id="suUser" autocomplete="off" onkeydown="authEnter(event,'suPass')"></div>
+    <div class="field"><label>Password</label><div class="pwWrap"><input id="suPass" type="password" autocomplete="new-password" onkeydown="authEnter(event,'suPass2')" onkeyup="capsCheck(event,'suCaps')"><button type="button" class="pwEye" onclick="togglePw('suPass',this)">&#128065;</button></div><small class="capsHint" id="suCaps">Caps Lock ON hai</small></div>
+    <div class="field"><label>Password Dobara</label><div class="pwWrap"><input id="suPass2" type="password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSetup()" onkeyup="capsCheck(event,'suCaps2')"><button type="button" class="pwEye" onclick="togglePw('suPass2',this)">&#128065;</button></div><small class="capsHint" id="suCaps2">Caps Lock ON hai</small></div>
+    <button class="primary authBtn" onclick="doSetup()">Account Banayein</button>
+   </div>
+   <div id="authLogin">
+    <h2>Login</h2>
+    <p class="hint">Apne username aur password se system kholein.</p>
+    <div class="field"><label>Username</label><input id="liUser" autocomplete="username" onkeydown="if(event.key==='Enter')$('liPass').focus()"></div>
+    <div class="field"><label>Password</label><div class="pwWrap"><input id="liPass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" onkeyup="capsCheck(event,'liCaps')"><button type="button" class="pwEye" onclick="togglePw('liPass',this)">&#128065;</button></div><small class="capsHint" id="liCaps">Caps Lock ON hai</small></div>
+    <div class="authRow"><label><input type="checkbox" id="liRemember"> Username yaad rakhein</label><span id="authRoleTip" class="pill">Admin / Operator</span></div>
+    <button class="primary authBtn" onclick="doLogin()">Login</button>
+    <p class="authSafe">&#128274; Aap ka data secure device + cloud sync par mehfooz hai</p>
+   </div>
+   <p class="authMsg" id="authMsg"></p>
+  </div>
+ </div>
+</div>
+<div class="welcome launch" id="launchScreen" style="display:none">
+ <div class="welOrb o1"></div><div class="welOrb o2"></div>
+ <div class="welBox">
+  <div class="welMark">BF</div>
+  <p class="welHi">Khush Aamdeed</p>
+  <h1 id="lchName">Loading</h1>
+  <p class="welSub"><span id="lchRole"></span> &bull; <span id="lchBiz">Business Finance OS</span></p>
+  <div class="lchStat"><b><span id="lchPct">0</span>%</b><span>System load</span></div>
+  <div class="lchBar"><i id="lchBar"></i></div>
+  <div class="lchList" id="lchList"></div>
+  <p class="welMsg" id="lchMsg">Tayyar ho raha hai...</p>
+  <p class="lchSkip">Screen par click karein to seedha system khul jaye</p>
  </div>
 </div>
 <div class="modalBg" id="logoModal">
@@ -745,7 +1089,7 @@ function renderAll(){renderExpReport();renderDashboard();renderReconcile();rende
 function doPrint(title){
  toast("PDF ke liye print window mein Destination: \"Save as PDF\" chunein");
  let old=document.title;document.title=title;
- setTimeout(()=>{applyPrintLogo();window.print();document.title=old;document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))},80);
+ setTimeout(()=>{applyPrintLogo();window.print();document.title=old;document.body.classList.remove("printOnly","printDashAll");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))},80);
 }
 function printPage(){
  let p=document.querySelector(".page.active").id,name=$("pageTitle").textContent;
@@ -763,7 +1107,7 @@ function printExpReport(){
  document.body.classList.add("printOnly");$("expReportPanel").classList.add("printTarget");
  doPrint(`${db.settings.business||"Business"} - ${expReportTitle()}`);
 }
-window.addEventListener("afterprint",()=>{document.body.classList.remove("printOnly");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("printOnly","printDashAll");document.querySelectorAll(".printTarget").forEach(x=>x.classList.remove("printTarget"))});
 
 // ---------- Expense report (monthly / yearly) ----------
 const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -949,11 +1293,60 @@ async function hashPw(pw,salt){
 function isAdmin(){return !!currentUser&&currentUser.role==="Admin"}
 function findUser(username){let u=String(username||"").trim().toLowerCase();return db.users.find(x=>x.username.toLowerCase()===u)}
 function showAuth(){
- let setup=!db.users.length;
+ let setup=cloudReady&&!db.users.length;
  $("authSetup").style.display=setup?"":"none";$("authLogin").style.display=setup?"none":"";
- $("authMsg").textContent="";$("authScreen").style.display="flex";
- setTimeout(()=>$(setup?"suName":"liUser").focus(),50);
+ $("authMsg").textContent="";$("authMsg").classList.remove("ok");$("authScreen").style.display="flex";
+ let biz=db.settings.business&&db.settings.business!=="My Business"?db.settings.business:"Business Finance OS";
+ $("authBrand").textContent=biz;
+ let rem=localStorage.getItem(REMEMBER_KEY);
+ if(!setup&&rem){$("liUser").value=rem;let cb=$("liRemember");if(cb)cb.checked=true}
+ setHeroStats();startTicker();
+ setTimeout(()=>$(setup?"suName":"liUser").focus(),80);
 }
+function setHeroStats(){
+ let all=ARR.reduce((n,k)=>n+db[k].length,0)+db.users.length;
+ let tod=ARR.reduce((n,k)=>n+db[k].filter(x=>x.date===today).length,0);
+ $("heroEntries").textContent=all;
+ $("heroToday").textContent=tod;
+ let tp=$("abTape");
+ if(tp){
+  let inc=db.income||[];
+  let items=[["SALES",inc.filter(isSale).length+" entries",1],["RECOVERY",inc.filter(isColl).length+" entries",1],["PURCHASES",db.purchases.length+" entries",0],["EXPENSES",db.expenses.length+" entries",0],["RECORDS",all,1],["AAJ",tod+" entries",1],["CLOUD","SYNC ON",1],["SECURITY","LOCKED",1]];
+  let h=items.map(([k,v,up])=>`<span>${k} ${up?"<b>&#9650; "+esc(v)+"</b>":"<i>&#9660; "+esc(v)+"</i>"}</span>`).join("");
+  tp.innerHTML=h+h;
+ }
+}
+function heroClockTick(){let el=$("heroClock");if(el)el.textContent="Live • "+new Date().toLocaleTimeString("en-PK",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+const TICKS=["Sales, purchases, udhaar aur munafa \u2014 sab kuch ek hi screen par, live sync ke saath.","Cash in hand, market ka udhaar aur owner withdrawals \u2014 har waqt updated.","Report banaiyein, PDF nikaliyein \u2014 poora saal ka hisaab ek click mein.","Admin aur Operator roles \u2014 team ke saath safe sharing."];
+let tickerI=0,tickerT=null;
+function startTicker(){
+ heroClockTick();
+ if(!startTicker._c)startTicker._c=setInterval(()=>{if($("authScreen").style.display==="none"){clearInterval(startTicker._c);startTicker._c=null;return}heroClockTick()},1000);
+ if(tickerT)return;
+ tickerT=setInterval(()=>{
+  let el=$("authTicker");if(!el||$("authScreen").style.display==="none"){clearInterval(tickerT);tickerT=null;return}
+  el.classList.add("fade");
+  setTimeout(()=>{tickerI=(tickerI+1)%TICKS.length;el.textContent=TICKS[tickerI];el.classList.remove("fade")},340);
+ },5200);
+}
+function togglePw(id,btn){
+ let i=$(id);if(!i)return;
+ i.type=i.type==="password"?"text":"password";
+ btn.textContent=i.type==="password"?"\uD83D\uDC41":"\uD83D\uDD2E";
+ btn.blur();i.focus();
+}
+function capsCheck(e,id){
+ let el=$(id);if(!el)return;
+ let on=e.getModifierState&&e.getModifierState("CapsLock");
+ el.classList.toggle("on",!!on);
+}
+function authFail(msg){
+ let m=$("authMsg");m.textContent=msg;m.classList.remove("ok");
+ let box=document.querySelector(".authBox");
+ box.classList.remove("authShake");void box.offsetWidth;box.classList.add("authShake");
+}
+function authEnter(e,next){if(e.key==="Enter")$(next).focus()}
+const REMEMBER_KEY="bfos_remember";
 async function doSetup(){
  let name=$("suName").value.trim(),user=$("suUser").value.trim(),p1=$("suPass").value,p2=$("suPass2").value;
  if(!name||!user){$("authMsg").textContent="Naam aur username likhein";return}
@@ -963,11 +1356,38 @@ async function doSetup(){
  db.users.push(u);save();startSession(u);
 }
 async function doLogin(){
+ if(!cloudReady){
+  let m=$("authMsg");m.classList.add("ok");m.textContent="Online data load ho raha hai, thora intezar...";
+  await cloudP;m.classList.remove("ok");
+  if(!cloudReady){authFail("Online data load nahi hua. Internet check karein.");$("authMsg").innerHTML+=' <button class="secondary" onclick="location.reload()">Dobara Koshish</button>';return}
+  m.textContent="";
+ }
  let u=findUser($("liUser").value),p=$("liPass").value;
  if(!u||u.pass!==await hashPw(p,u.salt)){$("authMsg").textContent="Username ya password ghalat hai";return}
  $("liPass").value="";startSession(u);
 }
-function startSession(u){currentUser=u;sessionStorage.setItem(SESSION_KEY,u.id);$("authScreen").style.display="none";applyRole()}
+function startSession(u){currentUser=u;sessionStorage.setItem(SESSION_KEY,u.id);let rem=$("liRemember");if(rem&&$("authLogin").style.display!=="none"){if(rem.checked)localStorage.setItem(REMEMBER_KEY,u.username);else localStorage.removeItem(REMEMBER_KEY)}$("authScreen").style.display="none";applyRole();go("dashboard");runLaunch(u)}
+// ---------- Post-login launch (game style loading) ----------
+let lchT=null;
+function runLaunch(u){
+ let sc=$("launchScreen");if(!sc)return;
+ $("lchName").textContent=u.name||u.username;$("lchRole").textContent=u.role;
+ $("lchBiz").textContent=db.settings.business&&db.settings.business!=="My Business"?db.settings.business:"Business Finance OS";
+ let steps=["Profile verify ho raha hai","Cloud data sync","Cash ledger tayyar","Sales aur udhaar hisaab","Munafa calculate","Dashboard launch"];
+ $("lchList").innerHTML=steps.map(s=>`<div><span class="lchDot"></span>${esc(s)}</div>`).join("");
+ let rows=[...$("lchList").children],pct=0;
+ sc.classList.remove("hide");sc.style.display="flex";
+ const finish=()=>{if(lchT){clearInterval(lchT);lchT=null}$("lchPct").textContent=100;$("lchBar").style.width="100%";rows.forEach(r=>{r.className="done";r.querySelector(".lchDot").innerHTML="&#10003;"});$("lchMsg").textContent="System tayyar hai! Game on.";sc.onclick=null;setTimeout(()=>{sc.classList.add("hide");setTimeout(()=>{sc.style.display="none"},500)},380)};
+ sc.onclick=finish;
+ lchT=setInterval(()=>{
+  pct=Math.min(100,pct+1+Math.random()*3.2);
+  $("lchPct").textContent=Math.floor(pct);$("lchBar").style.width=pct+"%";
+  let cur=Math.min(steps.length-1,Math.floor(pct/100*steps.length));
+  rows.forEach((r,i)=>{r.className=i<cur?"done":i===cur?"now":"";r.querySelector(".lchDot").innerHTML=i<cur?"&#10003;":""});
+  $("lchMsg").textContent=steps[cur]+"...";
+  if(pct>=100)finish();
+ },45);
+}
 function logout(){sessionStorage.removeItem(SESSION_KEY);currentUser=null;location.reload()}
 function applyRole(){
  document.body.classList.toggle("roleOperator",!isAdmin());
@@ -1012,6 +1432,11 @@ function deleteUser(id){
  if(!confirm(`User "${u.name}" delete kar dein?`))return;
  db.users=db.users.filter(x=>x.id!==id);save();renderUsers();toast("User delete ho gaya");
 }
+function refreshAuthMode(){
+ if(currentUser||$("authScreen").style.display==="none")return;
+ let setup=cloudReady&&!db.users.length,wasSetup=$("authSetup").style.display!=="none";
+ if(setup!==wasSetup)showAuth();else{setHeroStats();$("authBrand").textContent=db.settings.business&&db.settings.business!=="My Business"?db.settings.business:"Business Finance OS"}
+}
 function initAuth(){
  let sid=sessionStorage.getItem(SESSION_KEY),u=sid&&db.users.find(x=>x.id===sid);
  if(u){currentUser=u;applyRole()}else showAuth();
@@ -1033,7 +1458,8 @@ function cloudSave(){
  return cloudDoc.set({data:j,updated:Date.now()}).catch(e=>toast("Online save nahi hua: "+(e.code||e.message)));
 }
 async function cloudStart(){
- let wel=$("welcomeScreen");
+ let wel=$("welcomeScreen"),hasSess=!!sessionStorage.getItem(SESSION_KEY);
+ if(!hasSess){wel.style.display="none";showAuth()}
  if(db.settings.business&&db.settings.business!=="My Business")$("welBiz").textContent=db.settings.business;
  try{
   if(!window.firebase)throw new Error("Firebase load nahi hua");
@@ -1047,6 +1473,13 @@ async function cloudStart(){
    lastCloudJson=j;db=normalize(JSON.parse(j));localStorage.setItem(KEY,JSON.stringify(db));
   }
   cloudReady=true;
+  // Ek dafa: Admin ka login reset (username: admin, password: admin)
+  if(!db.settings.adminReset1){
+   let a=db.users.find(x=>x.role==="Admin");
+   if(a){db.users.forEach(x=>{if(x!==a&&x.username.toLowerCase()==="admin")x.username=x.username+"_2"});a.username="admin";a.salt=uid();a.pass=await hashPw("admin",a.salt)}
+   db.settings.adminReset1=true;localStorage.setItem(KEY,JSON.stringify(db));
+   if(a)await cloudSave();
+  }
   if(!j&&db.users.length)await cloudSave();
   cloudDoc.onSnapshot(sn=>{
    if(!sn.exists||sn.metadata.hasPendingWrites)return;
@@ -1057,17 +1490,18 @@ async function cloudStart(){
    renderAll();
   });
  }catch(e){
+  if(!hasSess){cloudReady=false;return}
   wel.classList.add("error");$("welMsg").classList.add("err");
   $("welMsg").innerHTML=`Online data load nahi hua. Internet check karein.<br><button class="primary authBtn" onclick="location.reload()">Dobara Koshish</button>`;
   return;
  }
  if(db.settings.business&&db.settings.business!=="My Business")$("welBiz").textContent=db.settings.business;
  $("welMsg").textContent="Tayyar hai!";
- setTimeout(()=>{wel.classList.add("hide");setTimeout(()=>wel.style.display="none",500)},400);
+ if(hasSess)setTimeout(()=>{wel.classList.add("hide");setTimeout(()=>wel.style.display="none",500)},400);
  ["dashFrom","cashFrom","repFrom"].forEach(id=>$(id).value=openDate());
  $("brandName").textContent=db.settings.business||"Business Finance OS";
  renderAll();
- initAuth();
+ if(hasSess)initAuth();else refreshAuthMode();
 }
 
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.page));
@@ -1079,6 +1513,18 @@ $("expRepMonth").value=today.slice(0,7);$("expRepYear").value=today.slice(0,4);
 document.body.dataset.page="dashboard";
 $("brandName").textContent=db.settings.business||"Business Finance OS";
 renderAll();
-cloudStart();
+// ---------- Day / Night theme ----------
+const THEME_KEY="bfos_theme";
+function applyTheme(t){
+ let day=t==="day";document.body.classList.toggle("day",day);
+ let b=$("themeBtn");if(b)b.innerHTML=day?"&#9790; Night":"&#9728; Day";
+}
+function toggleTheme(){
+ let t=document.body.classList.contains("day")?"night":"day";
+ try{localStorage.setItem(THEME_KEY,t)}catch(e){}
+ applyTheme(t);toast(t==="day"?"Day mode on":"Night mode on");
+}
+try{applyTheme(localStorage.getItem(THEME_KEY)||"night")}catch(e){applyTheme("night")}
+const cloudP=cloudStart();
 
 </script>
