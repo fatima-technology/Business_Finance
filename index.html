@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Business Finance OS</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#07111f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -464,7 +468,7 @@ body.day .sideClose{background:#ffffff;border-color:#c7d5e2;color:#13283d}
 <main class="main">
  <div class="top">
   <div><button class="secondary mobileMenu" onclick="toggleSide()">☰</button><h1 id="pageTitle">Business Dashboard</h1><p id="todayText"></p></div>
-  <div class="actions"><span class="userBadge" id="userBadge"></span><button class="secondary adminOnly" onclick="exportData()">Backup</button><button class="secondary adminOnly" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button><button class="secondary themeBtn noPrint" id="themeBtn" onclick="toggleTheme()">&#9728; Day</button><button class="secondary" onclick="logout()">Logout</button></div>
+  <div class="actions"><span class="userBadge" id="userBadge"></span><button class="secondary" id="installBtn" hidden onclick="installApp()">Install app</button><button class="secondary adminOnly" onclick="exportData()">Backup</button><button class="secondary adminOnly" onclick="document.getElementById('restoreFile').click()">Restore</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restoreData(event)"><button class="primary" onclick="printPage()">Print / PDF</button><button class="secondary themeBtn noPrint" id="themeBtn" onclick="toggleTheme()">&#9728; Day</button><button class="secondary" onclick="logout()">Logout</button></div>
  </div>
 
  <div class="printHead" id="printHead"><h1 id="phBiz"></h1><h2 id="phTitle"></h2><p id="phInfo"></p></div>
@@ -1528,4 +1532,18 @@ function toggleTheme(){
 try{applyTheme(localStorage.getItem(THEME_KEY)||"night")}catch(e){applyTheme("night")}
 const cloudP=cloudStart();
 
+</script>
+<script>
+/* Install as app (PWA) */
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
+let installEvt=null;
+const isInstalled=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+if(!isInstalled())document.getElementById('installBtn').hidden=false;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e});
+addEventListener('appinstalled',()=>{document.getElementById('installBtn').hidden=true});
+async function installApp(){
+ if(installEvt){installEvt.prompt();await installEvt.userChoice;installEvt=null;return}
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ alert(ios?'iPhone: Safari mein neeche Share button dabayein, phir "Add to Home Screen".':'Chrome mein upar \u22EE menu kholein, phir "Install app" ya "Add to Home screen".');
+}
 </script>
